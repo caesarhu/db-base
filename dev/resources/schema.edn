@@ -1,0 +1,180 @@
+[^{:lacinia/tag true
+   :postgres/tag true
+   :spec/tag true
+   :translate/tag true}
+ default
+
+ ^{:translate/chinese "性別型別"
+   :enum true}
+ gender-type
+ [男 女]
+
+ ^{:translate/chinese "間直接型別"
+   :enum true}
+ direct-type
+ [直接 間接]
+
+ ^{:translate/chinese "薪資計算型別"
+   :enum true}
+ salary-type
+ [月薪 計時 計件]
+
+ ^{:translate/chinese "員工型別"
+   :enum true}
+ employee-type
+ [回聘 契約正式 契約工讀 計時 計件]
+
+ ^{:translate/chinese "費用型別"
+   :enum true}
+ price-type
+ [直接費用 間接費用 研發費用 推銷費用 管理費用 製造費用]
+
+ ^{:translate/chinese "員工異動型別"
+   :enum true}
+ employee-change-type
+ [到職 離職 復職 停職]
+
+ ^{:translate/chinese "月薪型別"
+   :enum true}
+ month-type
+ [上期 下期]
+
+ ^{:translate/chinese "員工基本資料檔"
+   :postgres.table/index [:idx_employee_by_name :employee :name]
+   :postgres.table/table-order 200}
+ employee
+ [^{:type Integer
+    :postgres.column/identity-always true
+    :postgres.column/primary-key true
+    :spec/override clojure.core/pos-int?
+    :translate/chinese "員工基本資料檔id"} id
+  ^{:type String
+    :postgres.column/unique true
+    :translate/chinese "身分證號"} taiwan-id
+  ^{:type String
+    :postgres.column/unique true
+    :translate/chinese "員工編號"} company-id
+  ^{:type String
+    :translate/chinese "姓名"} name
+  ^{:type Date
+    :optional true
+    :translate/chinese "生日"} birthday
+  ^{:type gender-type
+    :optional true
+    :spec/override clojure.core/string?
+    :translate/chinese "性別"} gender
+  ^{:type direct-type
+    :optional true
+    :spec/override clojure.core/string?
+    :translate/chinese "間直接"} direct-kind
+  ^{:type String
+    :optional true
+    :postgres.column/generate-column "CASE employee_kind WHEN '計時' THEN '計時' WHEN '計件' THEN '計件' ELSE '月薪' END"
+    :spec/override clojure.core/string?
+    :translate/chinese "薪資類別"} salary-kind
+  ^{:type employee-type
+    :optional true
+    :spec/override clojure.core/string?
+    :translate/chinese "員工類別"} employee-kind
+  ^{:type price-type
+    :optional true
+    :spec/override clojure.core/string?
+    :translate/chinese "費用類別"} price-kind
+  ^{:type String
+    :optional true
+    :translate/chinese "戶籍地址"} reg-addr
+  ^{:type String
+    :optional true
+    :translate/chinese "通訊地址"} mail-addr
+  ^{:type String
+    :optional true
+    :translate/chinese "單位代號"} unit-id
+  ^{:type bank
+    :spec/override clojure.core/string?
+    :postgres.column/on-update :cascade
+    :postgres.column/on-delete :cascade
+    :optional true
+    :translate/chinese "銀行代號"} bank-id
+  ^{:type String
+    :optional true
+    :translate/chinese "銀行帳號"} account
+  ^{:type String
+    :optional true
+    :translate/chinese "工作地"} work-place
+  ^{:type String
+    :optional true
+    :translate/chinese "廠區"} factory
+  ^{:type String
+    :optional true
+    :translate/chinese "職稱"} job-title
+  ^{:type String
+    :optional true
+    :translate/chinese "職稱2"} job-title2
+  ^{:type String
+    :optional true
+    :translate/chinese "住家電話"} phone
+  ^{:type String
+    :optional true
+    :translate/chinese "行動電話"} mobile
+  ^{:type String
+    :optional true
+    :translate/chinese "學歷"} education
+  ^{:type String
+    :optional true
+    :translate/chinese "修業期間"} education-period
+  ^{:type String
+    :optional true
+    :translate/chinese "特殊例外處理"} exception
+  ^{:type String
+    :optional true
+    :translate/chinese "備註"} memo]
+
+ ^{:translate/chinese "員工異動檔"
+   :postgres.table/table-order 300}
+ employee-change
+ [^{:type Integer
+    :postgres.column/identity-always true
+    :postgres.column/primary-key true
+    :spec/override clojure.core/pos-int?
+    :translate/chinese "員工異動檔id"} id
+  ^{:type employee
+    :spec/override clojure.core/pos-int?
+    :postgres.column/on-update :cascade
+    :postgres.column/on-delete :cascade
+    :translate/chinese "員工基本資料表id"} employee-id
+  ^{:type employee-change-type
+    :spec/override clojure.core/string?
+    :translate/chinese "異動類別"} change-kind
+  ^{:type Date
+    :translate/chinese "異動日期"} change-day
+  ^{:type DateTime
+    :default :CURRENT_TIMESTAMP
+    :translate/chinese "輸入異動時間"} change-at
+  ^{:type String
+    :optional true
+    :translate/chinese "備註"} memo]
+
+ ^{:translate/chinese "銀行一覽表"
+   :postgres.table/index [:idx_bank_by_head :bank :head_id]
+   :postgres.table/table-order 100}
+ bank
+ [^{:type String
+    :postgres.column/generate-column "LEFT(bank_id, 3)"
+    :translate/chinese "總行代號"} head-id
+  ^{:type String
+    :postgres.column/primary-key true
+    :translate/chinese "銀行代號"} bank-id
+  ^{:type String
+    :translate/chinese "銀行名稱"} name
+  ^{:type String
+    :optional true
+    :translate/chinese "地址"} addr
+  ^{:type String
+    :optional true
+    :translate/chinese "電話"} phone
+  ^{:type String
+    :optional true
+    :translate/chinese "負責人"} principal
+  ^{:type Date
+    :optional true
+    :translate/chinese "異動日期"} change-date]]

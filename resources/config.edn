@@ -1,0 +1,22 @@
+{:jdbc-url "jdbc:postgresql://localhost:15432/db-base?user=shun&password=smilehu"
+ :connection-uri #profile {:default #env JDBC_DATABASE_URL
+                           :dev #or [#env JDBC_DATABASE_URL
+                                     #ref [:jdbc-url]]}
+ :schema-path "schema.edn"
+ :migration-dir "migrations"
+
+ :migratus {:store :database
+            :migration-dir #ref [:migration-dir]
+            :db {:connection-uri #ref [:connection-uri]}}
+
+ :hikari-cp {:jdbc-url #ref [:connection-uri]}
+
+ :components
+ {:db
+  {:pre-start
+   (migratus.core/migrate #ref [:migratus])
+   :start
+   ;(next.jdbc/get-datasource #ref [:connection-uri])
+   (hikari-cp.core/make-datasource #ref [:hikari-cp])
+   :stop
+   (hikari-cp.core/close-datasource this)}}}
