@@ -1,4 +1,4 @@
-{:jdbc-url "jdbc:postgresql://localhost:15432/db-base?user=shun&password=smilehu"
+{:jdbc-url "jdbc:postgresql://localhost:35432/db-base?user=shun&password=smilehu"
  :connection-uri #profile {:default #env JDBC_DATABASE_URL
                            :dev #or [#env JDBC_DATABASE_URL
                                      #ref [:jdbc-url]]}
