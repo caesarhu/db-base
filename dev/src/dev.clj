@@ -5,7 +5,9 @@
             [expound.alpha :as expound]
             [orchestra.spec.test :as stest]
             [db-base.config :as config]
-            [juxt.clip.repl :refer [start stop set-init! reset system]]))
+            [clojure.tools.gitlibs :as gl]
+            [juxt.clip.repl :refer [start stop set-init! reset system]]
+            [gungnir.model :as gm]))
 
 (set-init! (fn [] (config/config :dev)))
 

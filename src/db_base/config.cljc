@@ -28,3 +28,4 @@
    (migratus/rollback (migratus-config tag)))
   ([]
    (rollback :dev)))
+
