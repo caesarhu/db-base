@@ -1,0 +1,15 @@
+2020-12-29T15:39:52.857+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Starting migrations
+2020-12-29T15:39:53.065+08 caesarhu-vmwarevirtualplatform INFO [migratus.database:326] - creating migration table 'schema_migrations'
+2020-12-29T15:39:53.115+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Ending migrations
+2020-12-29T15:40:32.786+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Starting migrations
+2020-12-29T15:40:32.818+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Ending migrations
+2020-12-29T15:41:04.774+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Starting migrations
+2020-12-29T15:41:04.801+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Ending migrations
+2020-12-29T15:41:09.124+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Starting migrations
+2020-12-29T15:41:09.155+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Ending migrations
+2020-12-29T15:43:18.503+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Starting migrations
+2020-12-29T15:43:18.715+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Ending migrations
+2020-12-29T15:47:57.909+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Starting migrations
+2020-12-29T15:47:58.070+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Ending migrations
+2020-12-29T15:49:29.501+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Starting migrations
+2020-12-29T15:49:29.677+08 caesarhu-vmwarevirtualplatform INFO [migratus.core:326] - Ending migrations

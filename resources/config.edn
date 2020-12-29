@@ -1,7 +1,13 @@
-{:jdbc-url "jdbc:postgresql://localhost:35432/db-base?user=shun&password=smilehu"
- :connection-uri #profile {:default #env JDBC_DATABASE_URL
-                           :dev #or [#env JDBC_DATABASE_URL
-                                     #ref [:jdbc-url]]}
+{:system-profile :dev
+ :jdbc-url
+ #profile {:dev "jdbc:postgresql://localhost:35432/db-base?user=shun&password=smilehu"
+           :test "jdbc:postgresql://localhost:45432/db-base?user=shun&password=smilehu"
+           :default "jdbc:postgresql://localhost:35432/db-base?user=shun&password=smilehu"}
+
+ :connection-uri #profile {:default #or [#env JDBC_DATABASE_URL
+                                         #ref [:jdbc-url]]
+                           :dev #ref [:jdbc-url]
+                           :test #ref [:jdbc-url]}
  :schema-path "schema.edn"
  :migration-dir "migrations"
 
@@ -11,12 +17,26 @@
 
  :hikari-cp {:jdbc-url #ref [:connection-uri]}
 
+ :appender-opts
+ #profile {:dev {:path "logs/dev.log"
+                 :max-size 60
+                 :pattern :daily}
+           :test {:path "logs/test.log"
+                  :max-size 60
+                  :pattern :daily}
+           :default {:path "logs/db-base.log"
+                     :max-size 60
+                     :pattern :daily}}
+
  :components
- {:db
-  {:pre-start
-   (migratus.core/migrate #ref [:migratus])
-   :start
-   ;(next.jdbc/get-datasource #ref [:connection-uri])
-   (hikari-cp.core/make-datasource #ref [:hikari-cp])
-   :stop
-   (hikari-cp.core/close-datasource this)}}}
+ {:timbre
+  {:start (db-base.config/set-timbre-config!
+            {:min-level :info
+             :timestamp-opts {:timezone (db-base.config/taipei-zone)}
+             :appenders {:println {:min-level :info}
+                         :rolling (db-base.config/rolling-appender #ref [:appender-opts])}})}
+  :migratus
+  {:start (migratus.core/migrate #ref [:migratus])}
+
+  :system
+  {:stop (redelay.core/stop)}}}

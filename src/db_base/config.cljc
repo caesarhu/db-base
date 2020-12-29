@@ -1,31 +1,37 @@
 (ns db-base.config
-  (:require [aero.core :as aero]
-            [clojure.java.io :as io]
-            [migratus.core :as migratus]))
+  (:require
+    [aero.core :as aero]
+    [clojure.java.io :as io]
+    [redelay.core :as redelay]
+    [taoensso.timbre :as timbre]
+    [taoensso.timbre.appenders.3rd-party.rolling :as rolling]))
 
-(defn config
+(def config-edn "config.edn")
+
+(defn read-edn-config
   ([profile]
-   (aero/read-config (io/resource "config.edn") {:profile profile}))
+   (aero/read-config (io/resource config-edn) {:profile profile}))
   ([]
-   (config :dev)))
+   (let [config-file (io/resource config-edn)
+         system-profile (:system-profile (aero/read-config config-file))]
+     (aero/read-config config-file {:profile system-profile}))))
 
-;;; database migrations
+(def config
+  (redelay/state (read-edn-config)))
 
-(defn migratus-config
-  ([tag]
-   (:migratus (config tag)))
-  ([]
-   (migratus-config :dev)))
+;;; timbre
 
-(defn migrate
-  ([tag]
-   (migratus/migrate (migratus-config tag)))
-  ([]
-   (migrate :dev)))
+(defn taipei-zone
+  []
+  (java.util.TimeZone/getTimeZone "Asia/Taipei"))
 
-(defn rollback
-  ([tag]
-   (migratus/rollback (migratus-config tag)))
-  ([]
-   (rollback :dev)))
+(defn rolling-appender
+  [opts]
+  (rolling/rolling-appender opts))
+
+(defn set-timbre-config!
+  [m]
+  (timbre/set-config! timbre/default-config)
+  (timbre/merge-config! m))
+
 

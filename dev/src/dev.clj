@@ -9,7 +9,7 @@
             [juxt.clip.repl :refer [start stop set-init! reset system]]
             [gungnir.model :as gm]))
 
-(set-init! (fn [] (config/config :dev)))
+(set-init! (fn [] @config/config))
 
 (comment
   (start)
