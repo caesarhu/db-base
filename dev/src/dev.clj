@@ -7,7 +7,8 @@
             [db-base.config :as config]
             [clojure.tools.gitlibs :as gl]
             [juxt.clip.repl :refer [start stop set-init! reset system]]
-            [gungnir.model :as gm]))
+            [gungnir.model :as gm]
+            [db-base.migratus :as migratus]))
 
 (set-init! (fn [] @config/config))
 

@@ -1,21 +1,7 @@
 {:system-profile :dev
- :jdbc-url
- #profile {:dev "jdbc:postgresql://localhost:35432/db-base?user=shun&password=smilehu"
-           :test "jdbc:postgresql://localhost:45432/db-base?user=shun&password=smilehu"
-           :default "jdbc:postgresql://localhost:35432/db-base?user=shun&password=smilehu"}
 
- :connection-uri #profile {:default #or [#env JDBC_DATABASE_URL
-                                         #ref [:jdbc-url]]
-                           :dev #ref [:jdbc-url]
-                           :test #ref [:jdbc-url]}
  :schema-path "schema.edn"
  :migration-dir "migrations"
-
- :migratus {:store :database
-            :migration-dir #ref [:migration-dir]
-            :db {:connection-uri #ref [:connection-uri]}}
-
- :hikari-cp {:jdbc-url #ref [:connection-uri]}
 
  :appender-opts
  #profile {:dev {:path "logs/dev.log"
@@ -27,6 +13,21 @@
            :default {:path "logs/db-base.log"
                      :max-size 60
                      :pattern :daily}}
+
+ :db-opts {:adapter       "postgresql"
+           :username      "shun"
+           :password      "smilehu"
+           :database-name #profile {:dev "db-base"
+                                    :default "db-base"
+                                    :test "db-base_test"}
+           :server-name   "localhost"
+           :port-number   #profile {:dev 35432
+                                    :default 35432
+                                    :test 45432}}
+
+ :migratus {:store :database
+            :migration-dir #ref [:migration-dir]
+            :db #ref [:db-opts]}
 
  :components
  {:timbre
