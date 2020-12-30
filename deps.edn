@@ -36,6 +36,6 @@
         nilenso/honeysql-postgres {:mvn/version "0.2.6"}
         caesarhu/sql-formatter {:mvn/version "0.1.0"}
         org.clojure/tools.namespace {:mvn/version "1.1.0"}
-        migratus/migratus {:mvn/version "1.3.3"}
+        ragtime/ragtime {:mvn/version "0.8.0"}
         caesarhu/gungnir {:git/url "https://github.com/caesarhu/gungnir"
                           :sha "4f029f83d249e9405eb9676208637e2216f5c3ba"}}}

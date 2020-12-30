@@ -1,5 +1,10 @@
 {:system-profile :dev
 
+ :jdbc-url
+ #profile {:default "jdbc:postgresql://localhost:35432/db-base?user=shun&password=smilehu"
+           :dev "jdbc:postgresql://localhost:35432/db-base?user=shun&password=smilehu"
+           :test "jdbc:postgresql://localhost:45432/db-base_test?user=shun&password=smilehu"}
+
  :schema-path "schema.edn"
  :migration-dir "migrations"
 
@@ -14,20 +19,12 @@
                      :max-size 60
                      :pattern :daily}}
 
- :db-opts {:adapter       "postgresql"
-           :username      "shun"
-           :password      "smilehu"
-           :database-name #profile {:dev "db-base"
-                                    :default "db-base"
-                                    :test "db-base_test"}
-           :server-name   "localhost"
-           :port-number   #profile {:dev 35432
-                                    :default 35432
-                                    :test 45432}}
-
- :migratus {:store :database
-            :migration-dir #ref [:migration-dir]
-            :db #ref [:db-opts]}
+ :ragtime-config
+ {:datastore (ragtime.jdbc/sql-database {:connection-uri #ref [:jdbc-url]})
+  :migrations (ragtime.jdbc/load-resources #ref [:migration-dir])
+  :strategy #profile {:default ragtime.strategy/raise-error
+                      :dev ragtime.strategy/rebase
+                      :test ragtime.strategy/rebase}}
 
  :components
  {:timbre
@@ -36,8 +33,6 @@
              :timestamp-opts {:timezone (db-base.config/taipei-zone)}
              :appenders {:println {:min-level :info}
                          :rolling (db-base.config/rolling-appender #ref [:appender-opts])}})}
-  :migratus
-  {:start (migratus.core/migrate #ref [:migratus])}
 
   :system
   {:stop (redelay.core/stop)}}}

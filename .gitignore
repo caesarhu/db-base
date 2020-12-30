@@ -16,3 +16,4 @@ pom.xml.asc
 *.iml
 /.cpcache
 /.socket-repl-port
+/logs

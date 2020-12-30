@@ -4,6 +4,8 @@
     [clojure.java.io :as io]
     [redelay.core :as redelay]
     [taoensso.timbre :as timbre]
+    [gungnir.database :as gdb]
+    [hikari-cp.core :as hikari]
     [taoensso.timbre.appenders.3rd-party.rolling :as rolling]))
 
 (def config-edn "config.edn")
@@ -34,4 +36,12 @@
   (timbre/set-config! timbre/default-config)
   (timbre/merge-config! m))
 
+(def db
+  (redelay/state
+    :start
+    (let [data-source (hikari/make-datasource {:jdbc-url (:jdbc-url @config)})]
+      (gdb/set-datasource! data-source)
+      data-source)
 
+    :stop
+    (hikari/close-datasource this)))
