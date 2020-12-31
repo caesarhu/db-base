@@ -1,6 +1,12 @@
-(ns db-base.schema)
+(ns db-base.schema
+  (:require
+    [aero.core :as aero]
+    [clojure.java.io :as io]
+    [gungnir.model :as model]))
 
-(def gender
-  [:enum
-   {:error/message "should be: 男|女"}
-   "男" "女"])
+(def schema-edn "schema.edn")
+
+(defn db-schema
+  []
+  (let [schema (aero/read-config (io/resource schema-edn))]
+    schema))
