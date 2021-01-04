@@ -56,7 +56,7 @@
           [:employee/price-kind {:locale/zh-tw "費用類別"} :enum-price]
           [:employee/reg-addr {:locale/zh-tw "戶籍地址"} string?]
           [:employee/mail-addr {:locale/zh-tw "通訊地址"
-                                :optional true} string?]
+                                :optional true} [:maybe string?]]
           [:employee/unit-id {:locale/zh-tw "單位代號"} string?]
           [:employee/bank-id {:locale/zh-tw "銀行代號"
                               :optional true} :employee/bank-id]
