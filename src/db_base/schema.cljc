@@ -6,23 +6,20 @@
     [malli.core :as m]
     [malli.registry :as mr]
     [db-base.malli.malli-time :as time]
-    [db-base.malli.malli-id :as id]))
+    [db-base.malli.employee :as employee]))
+
+(def default-schema
+  (merge
+    (m/predicate-schemas)
+    (m/class-schemas)
+    (m/comparator-schemas)
+    (m/type-schemas)
+    (m/base-schemas)))
 
 (def registry*
   (atom (merge
-          (m/predicate-schemas)
-          (m/class-schemas)
-          (m/comparator-schemas)
-          (m/type-schemas)
-          (m/base-schemas)
-          {:local-date time/local-date
-           :local-date-time time/local-date-time
-           :taiwan-id id/taiwan-id
-           :company-id id/company-id
-           :bank-id id/bank-id
-           :account id/account})))
-
-
+          default-schema
+          time/time-schema)))
 
 (defn register! [type ?schema]
   (swap! registry* assoc type ?schema))
@@ -44,7 +41,12 @@
   []
   (:enum (db-schema)))
 
+;;; 加入enum 及 employee 的欄位 malli 定義
+
 (register-map! (db-enums))
+(register-map! employee/employee-schema)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn db-models
   []

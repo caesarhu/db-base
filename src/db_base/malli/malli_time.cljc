@@ -84,3 +84,7 @@
                        :json-schema/type   "string"
                        :json-schema/format "date-time"
                        :gen/gen gen-local-date-time}}))
+
+(def time-schema
+  {:local-date local-date
+   :local-date-time local-date-time})
