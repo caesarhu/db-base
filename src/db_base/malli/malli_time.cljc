@@ -1,8 +1,7 @@
 (ns db-base.malli.malli-time
   (:require [malli.core :as m]
             [java-time :as jt]
-            [clojure.test.check.generators :as gen]
-            [malli.generator :as mg]))
+            [clojure.test.check.generators :as gen]))
 
 (defn date->str
   [d]

@@ -45,9 +45,9 @@
                          :auto true
                          :locale/zh-tw "id"} pos-int?]
           [:employee/taiwan-id {:locale/zh-tw "身分證號"
-                                :unique true} string?]
+                                :unique true} :taiwan-id]
           [:employee/company-id {:locale/zh-tw "員工編號"
-                                 :unique true} string?]
+                                 :unique true} :company-id]
           [:employee/name {:locale/zh-tw "姓名"} string?]
           [:employee/birthday {:locale/zh-tw "生日"} :local-date]
           [:employee/gender {:locale/zh-tw "性別"} :enum-gender]
@@ -59,9 +59,9 @@
                                 :optional true} string?]
           [:employee/unit-id {:locale/zh-tw "單位代號"} string?]
           [:employee/bank-id {:locale/zh-tw "銀行代號"
-                              :optional true} string?]
+                              :optional true} :bank-id]
           [:employee/account {:locale/zh-tw "銀行帳號"
-                              :optional true} string?]
+                              :optional true} :account]
           [:employee/work-place {:locale/zh-tw "工作地"
                                  :optional true} string?]
           [:employee/factory {:locale/zh-tw "廠區"

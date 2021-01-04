@@ -38,4 +38,5 @@
         ragtime/ragtime {:mvn/version "0.8.0"}
         caesarhu/gungnir {:git/url "https://github.com/caesarhu/gungnir"
                           :sha "4f029f83d249e9405eb9676208637e2216f5c3ba"}
-        com.gfredericks/test.chuck {:mvn/version "0.2.10"}}}
+        com.gfredericks/test.chuck {:mvn/version "0.2.10"}
+        taiwan-id/taiwan-id {:mvn/version "0.4.1"}}}

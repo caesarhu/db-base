@@ -5,7 +5,8 @@
     [gungnir.model :as model]
     [malli.core :as m]
     [malli.registry :as mr]
-    [db-base.malli.malli-time :as time]))
+    [db-base.malli.malli-time :as time]
+    [db-base.malli.malli-id :as id]))
 
 (def registry*
   (atom (merge
@@ -15,7 +16,11 @@
           (m/type-schemas)
           (m/base-schemas)
           {:local-date time/local-date
-           :local-date-time time/local-date-time})))
+           :local-date-time time/local-date-time
+           :taiwan-id id/taiwan-id
+           :company-id id/company-id
+           :bank-id id/bank-id
+           :account id/account})))
 
 
 
