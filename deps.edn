@@ -2,8 +2,7 @@
  :aliases {:dev {:extra-paths ["dev/src" "test" "dev/resources"]
                  :extra-deps {fipp/fipp {:mvn/version "0.6.23"}
                               expound/expound {:mvn/version "0.8.7"}
-                              orchestra/orchestra {:mvn/version "2020.09.18-1"}
-                              com.gfredericks/test.chuck {:mvn/version "0.2.10"}
+                              orchestra/orchestra {:mvn/version "2021.01.01-1"}
                               org.clojure/tools.gitlibs {:mvn/version "1.0.100"}
                               lambdaisland/kaocha {:mvn/version "1.0.732"}
                               vlaaad/reveal {:mvn/version "1.2.182"}}}
@@ -11,8 +10,7 @@
            :test {:extra-paths ["test"]
                   :extra-deps {fipp/fipp {:mvn/version "0.6.23"}
                                expound/expound {:mvn/version "0.8.7"}
-                               orchestra/orchestra {:mvn/version "2020.09.18-1"}
-                               com.gfredericks/test.chuck {:mvn/version "0.2.10"}
+                               orchestra/orchestra {:mvn/version "2021.01.01-1"}
                                lambdaisland/kaocha {:mvn/version "1.0.732"}}}}
 
  :deps {org.clojure/clojure {:mvn/version "1.10.1"}
@@ -39,4 +37,5 @@
         org.clojure/tools.namespace {:mvn/version "1.1.0"}
         ragtime/ragtime {:mvn/version "0.8.0"}
         caesarhu/gungnir {:git/url "https://github.com/caesarhu/gungnir"
-                          :sha "4f029f83d249e9405eb9676208637e2216f5c3ba"}}}
+                          :sha "4f029f83d249e9405eb9676208637e2216f5c3ba"}
+        com.gfredericks/test.chuck {:mvn/version "0.2.10"}}}
