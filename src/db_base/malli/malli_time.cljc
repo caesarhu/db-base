@@ -37,11 +37,14 @@
    (rand-local-date (jt/local-date 1920 1 1) (jt/local-date))))
 
 (def gen-local-date
-  (let [start (.toEpochDay (jt/local-date 1920 1 1))
-        end (.toEpochDay (jt/local-date))]
-    (gen/fmap (fn [epoch]
-                (java.time.LocalDate/ofEpochDay epoch))
-              (gen/large-integer* {:min start :max end}))))
+  (gen/fmap (fn [_]
+              (rand-local-date))
+            gen/large-integer))
+
+(def gen-birthday
+  (gen/fmap (fn [_]
+              (rand-local-date (jt/local-date 1955 1 1) (jt/local-date 2002 12 31)))
+            gen/large-integer))
 
 (defn rand-local-time
   ([start-time end-time]
@@ -69,7 +72,7 @@
                        :encode/json date->str
                        :json-schema/type "string"
                        :json-schema/format "date"
-                       :gen/gen gen-local-date}}))
+                       :gen/gen gen-birthday}}))
 
 
 (def local-date-time

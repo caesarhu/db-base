@@ -7,6 +7,7 @@
 
  :schema-path "schema.edn"
  :migration-dir "migrations"
+ :address-path "address.csv"
 
  :appender-opts
  #profile {:dev {:path "logs/dev.log"

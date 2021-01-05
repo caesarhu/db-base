@@ -1,25 +1,26 @@
 (ns db-base.malli.employee
   (:require [taiwan-id.core :as id]
             [malli.core :as m]
-            [clojure.test.check.generators :as gen]))
+            [clojure.test.check.generators :as gen]
+            [db-base.malli.address :as addr]))
 
 (def taiwan-id
   (m/-simple-schema
     {:type :taiwan-id
      :pred id/some-id?
-     :type-properties {:error/message "必須是合法身分證號或外籍證號"
+     :type-properties {:error/message "必須是身分證號或外籍證號"
                        :json-schema/type "string"
                        :json-schema/format "string"
                        :gen/gen id/taiwan-gen}}))
 
 (def company-id
-  [:re {:error/message "必須是合法員工編號-5位數字或Z開頭4位數字"} #"^[Z\d]\d{4}$"])
+  [:re {:error/message "必須是員工編號-5位數字或Z開頭4位數字"} #"^[Z\d]\d{4}$"])
 
 (def bank-id
-  [:re {:error/message "必須是合法銀行代號-7位數字"} #"^\d{7}$"])
+  [:re {:error/message "必須是銀行代號-7位數字"} #"^\d{7}$"])
 
 (def account
-  [:re {:error/message "必須是合法銀行帳號-10位以上數字"} #"^\d{9}\d+$"])
+  [:re {:error/message "必須是銀行帳號-10位以上數字"} #"^\d{9}\d+$"])
 
 (def family
   ["李", "王", "張", "劉", "陳", "楊", "黃", "趙", "周", "吳", "徐", "孫", "朱", "馬", "胡", "郭", "林", "何", "高", "梁", "鄭", "羅", "宋", "謝", "唐", "韓", "曹", "許", "鄧", "蕭", "馮", "曾", "程", "蔡", "彭", "潘", "袁", "於", "董", "餘", "蘇", "葉", "呂", "魏", "蔣", "田", "杜", "丁", "沈", "姜", "範", "江", "傅", "鐘", "盧", "汪", "戴", "崔", "任", "陸", "廖", "姚", "方", "金", "邱", "夏", "譚", "韋", "賈", "鄒", "石", "熊", "孟", "秦", "閻", "薛", "侯", "雷", "白", "龍", "段", "郝", "孔", "邵", "史", "毛", "常", "萬", "顧", "賴", "武", "康", "賀", "嚴", "尹", "錢", "施", "牛", "洪", "龔"])
@@ -41,14 +42,48 @@
   (m/-simple-schema
     {:type :name
      :pred string?
-     :type-properties {:error/message "必須是合法姓名-2位以上字串"
+     :type-properties {:error/message "必須是姓名-2位以上字串"
                        :json-schema/type "string"
                        :json-schema/format "string"
                        :gen/gen gen-name}}))
+
+(def unit-id
+  [:re {:error/message "必須是單位代號-4位英數字"} #"^[A-Z]{3}[A-Z\d]$"])
+
+(def mobile
+  [:re {:error/message "必須是行動電話號碼-09+8位數字"} #"^09\d\d-\d{6}$"])
+
+(def phone
+  [:or
+   [:re {:error/message "必須是電話號碼含區碼"} #"^02-[235-8]\d{7}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^03-[2345689]\d{6}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^037-\d{6}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^04-[23]\d{7}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^04-[78]\d{6}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^049-\d{7}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^05-[2-8]\d{6}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^06-[2-79]\d{6}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^07-\d{7}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^089-\d{6}$"]
+   [:re {:error/message "必須是電話號碼含區碼"} #"^08-[78]\d{6}$"]])
+
+(def address
+  (m/-simple-schema
+    {:type :address
+     :pred string?
+     :type-properties {:error/message "必須是地址"
+                       :json-schema/type "string"
+                       :json-schema/format "string"
+                       :gen/gen addr/gen-address}}))
 
 (def employee-schema
   {:employee/taiwan-id taiwan-id
    :employee/company-id company-id
    :employee/bank-id bank-id
    :employee/account account
-   :employee/name name-schema})
+   :employee/name name-schema
+   :employee/unit-id unit-id
+   :employee/phone phone
+   :employee/mobile mobile
+   :employee/reg-addr address
+   :employee/mail-addr address})

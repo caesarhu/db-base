@@ -54,31 +54,31 @@
           [:employee/direct-kind {:locale/zh-tw "間直接"} :enum-direct]
           [:employee/employee-kind {:locale/zh-tw "員工類別"} :enum-employee]
           [:employee/price-kind {:locale/zh-tw "費用類別"} :enum-price]
-          [:employee/reg-addr {:locale/zh-tw "戶籍地址"} string?]
+          [:employee/reg-addr {:locale/zh-tw "戶籍地址"} :employee/reg-addr]
           [:employee/mail-addr {:locale/zh-tw "通訊地址"
-                                :optional true} [:maybe string?]]
-          [:employee/unit-id {:locale/zh-tw "單位代號"} string?]
+                                :optional true} [:maybe :employee/mail-addr]]
+          [:employee/unit-id {:locale/zh-tw "單位代號"} :employee/unit-id]
           [:employee/bank-id {:locale/zh-tw "銀行代號"
-                              :optional true} :employee/bank-id]
+                              :optional true} [:maybe :employee/bank-id]]
           [:employee/account {:locale/zh-tw "銀行帳號"
-                              :optional true} :employee/account]
+                              :optional true} [:maybe :employee/account]]
           [:employee/work-place {:locale/zh-tw "工作地"
-                                 :optional true} string?]
+                                 :optional true} [:maybe string?]]
           [:employee/factory {:locale/zh-tw "廠區"
-                              :optional true} string?]
+                              :optional true} [:maybe string?]]
           [:employee/job-title {:locale/zh-tw "職稱"
-                                :optional true} string?]
+                                :optional true} [:maybe string?]]
           [:employee/job-title-2 {:locale/zh-tw "職稱2"
-                                  :optional true} string?]
+                                  :optional true} [:maybe string?]]
           [:employee/phone {:locale/zh-tw "住家電話"
-                            :optional true} string?]
+                            :optional true} [:maybe :employee/phone]]
           [:employee/mobile {:locale/zh-tw "行動電話"
-                             :optional true} string?]
+                             :optional true} [:maybe :employee/mobile]]
           [:employee/education {:locale/zh-tw "學歷"
-                                :optional true} string?]
+                                :optional true} [:maybe string?]]
           [:employee/education-period {:locale/zh-tw "修業期間"
-                                       :optional true} string?]
+                                       :optional true} [:maybe string?]]
           [:employee/exception {:locale/zh-tw "特殊狀況例外處理"
-                                :optional true} bytes?]
+                                :optional true} [:maybe bytes?]]
           [:employee/memo {:locale/zh-tw "備註"
-                           :optional true} string?]]}}
+                           :optional true} [:maybe string?]]]}}

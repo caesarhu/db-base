@@ -11,7 +11,8 @@
 (defn entry-pair
   [v]
   (when-let [locale (get-locale v)]
-    [(first v) locale]))
+    (when (qualified-keyword? (first v))
+      [(first v) locale])))
 
 (defn model-dict
   [model]
