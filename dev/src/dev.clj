@@ -12,6 +12,7 @@
             [malli.error :as me]
             [malli.generator :as mg]
             [gungnir.model :as gm]
+            [gungnir.field :as gf]
             [db-base.schema :as dbs]))
 
 (set-init! (fn [] @config/config))
