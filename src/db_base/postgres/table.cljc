@@ -17,15 +17,18 @@
 (defn field-type
   [column]
   (loop [schema (last column)]
-    (let [f-type (m/type schema)]
+    (let [f-type (or (some-> schema
+                             m/properties
+                             :postgres/type)
+                     (m/type schema))]
       (cond
         (symbol? f-type) f-type
         (contains? type-keys f-type) f-type
         (= :re f-type) f-type
         (= :enum f-type) (enum/get-enum-name schema)
-        (= :malli.core/schema f-type) @db-schema/registry*
+        (= :malli.core/schema f-type) (recur (->> schema m/form (get @db-schema/registry*)))
         (= :maybe f-type) (recur (->> schema m/children first))
-        :else f-type))))
+        :else schema))))
 
 (defn field-types
   [model]

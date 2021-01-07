@@ -50,7 +50,7 @@
   [:re {:error/message "必須是行動電話號碼-09+8位數字"} #"^09\d\d-\d{6}$"])
 
 (def phone
-  [:or
+  [:or {:postgres/type :string}
    [:re {:error/message "必須是電話號碼含區碼"} #"^02-[235-8]\d{7}$"]
    [:re {:error/message "必須是電話號碼含區碼"} #"^03-[2345689]\d{6}$"]
    [:re {:error/message "必須是電話號碼含區碼"} #"^037-\d{6}$"]
