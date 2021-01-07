@@ -15,8 +15,8 @@
                [:local-date :local-date-time])))
 
 (defn field-type
-  [column]
-  (loop [schema (last column)]
+  [field]
+  (loop [schema (last field)]
     (let [f-type (or (some-> schema
                              m/properties
                              :postgres/type)
@@ -28,14 +28,40 @@
         (= :enum f-type) (enum/get-enum-name schema)
         (= :malli.core/schema f-type) (recur (->> schema m/form (get @db-schema/registry*)))
         (= :maybe f-type) (recur (->> schema m/children first))
-        :else schema))))
+        :else (throw (ex-info "field type parse error!"
+                              {:cause ::field-type
+                               :schema schema}))))))
+
+(def ->postgres-table
+  [[(set [:re :string 'string?]) :text]
+   [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) :bigint]
+   [(set ['float?, 'double?, 'decimal?, :double]) :decimal]
+   [(set [:local-date]) :date]
+   [(set [:local-date-time 'inst?]) :timestamp]
+   [(set [:boolean 'boolean?]) :boolean]
+   [(set ['bytes?]) :bytea]])
+
+(defn type->postgres
+  [type]
+  (let [type-fn (fn [tv]
+                  (let [[ts pt] tv]
+                    (when (contains? ts type)
+                      pt)))]
+    (if-let [postgres-type (some type-fn ->postgres-table)]
+      postgres-type
+      (when (keyword? type)
+        type))))
+
+(defn field->postgres-type
+  [field]
+  (-> field  field-type type->postgres))
 
 (defn field-types
   [model]
   (->> model
        gm/keys
        (map #(gm/child model %))
-       (map field-type)))
+       (map field->postgres-type)))
 
 (defn create-table
   [model])
