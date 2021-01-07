@@ -46,19 +46,21 @@
               (rand-local-date (jt/local-date 1955 1 1) (jt/local-date 2002 12 31)))
             gen/large-integer))
 
-(defn rand-local-time
-  ([start-time end-time]
-   (let [start (.toSecondOfDay start-time)
-         end (.toSecondOfDay end-time)
-         rand-epoch (+ (rand-int (- end start)) start)]
-     (java.time.LocalTime/ofSecondOfDay rand-epoch)))
-  ([]
-   (let [milli-property (jt/property (jt/local-time) :milli-of-day)]
-     (rand-local-time (jt/with-min-value milli-property) (jt/with-max-value milli-property)))))
-
 (def gen-local-date-time
   (gen/fmap #(-> (java.time.Instant/ofEpochMilli %)
                  (java.time.LocalDateTime/ofInstant java.time.ZoneOffset/UTC))
+            gen/large-integer))
+
+(def gen-20years-local-date-time
+  (gen/fmap (fn [_]
+              (let [day-milli (* 60 60 24 1000)
+                    epoch-day (->> (rand-local-date (jt/local-date 2000 1 1) (jt/local-date))
+                                   jt/as-map
+                                   :epoch-day)
+                    epoch-malli (+ (* epoch-day day-milli)
+                                   (rand-int day-milli))]
+                (-> (java.time.Instant/ofEpochMilli epoch-malli)
+                    (java.time.LocalDateTime/ofInstant java.time.ZoneOffset/UTC))))
             gen/large-integer))
 
 (def local-date
@@ -86,7 +88,7 @@
                        :encode/json        date-time->str
                        :json-schema/type   "string"
                        :json-schema/format "date-time"
-                       :gen/gen gen-local-date-time}}))
+                       :gen/gen gen-20years-local-date-time}}))
 
 (def time-schema
   {:local-date local-date

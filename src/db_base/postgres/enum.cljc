@@ -3,25 +3,29 @@
             [db-base.postgres.utils :as utils]
             [camel-snake-kebab.core :as csk]))
 
+(defn get-enum-name
+  [enum]
+  (-> enum
+      m/properties
+      :enum-name))
+
 (defn create-enum
-  [m enum-key]
-  (when-let [enum (and (= :enum (m/type (get m enum-key)))
-                       (get m enum-key))]
-    (let [values (m/children enum)
-          values-str (utils/comma-join-args values)]
-      (str "CREATE TYPE "
-           (csk/->snake_case_string enum-key)
-           " AS ENUM "
-           values-str
-           ";"))))
+  [enum]
+  (let [values (m/children enum)
+        values-str (utils/comma-join-args values)]
+    (str "CREATE TYPE "
+         (csk/->snake_case_string (get-enum-name enum))
+         " AS ENUM "
+         values-str
+         ";")))
 
 (defn drop-enum
-  [enum-key]
+  [enum]
   (str "DROP TYPE IF EXISTS "
-       (csk/->snake_case_string enum-key)
+       (csk/->snake_case_string (get-enum-name enum))
        " CASCADE;"))
 
 (defn generate-enum-edn
-  [m enum-key]
-  {:up (vector (create-enum m enum-key))
-   :down (vector (drop-enum enum-key))})
+  [enum]
+  {:up (vector (create-enum enum))
+   :down (vector (drop-enum enum))})

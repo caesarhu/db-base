@@ -1,42 +1,49 @@
 {:enum {:enum-gender
         [:enum
          {:error/message "should be: 男|女"
+          :enum-name :enum-gender
           :locale/zh-tw "性別"}
          "男" "女"]
 
         :enum-direct
         [:enum
          {:error/message "should be: 直接|間接"
+          :enum-name :enum-direct
           :locale/zh-tw "間直接"}
          "直接" "間接"]
 
         :enum-salary
         [:enum
          {:error/message "should be: 月薪|計時|計件"
+          :enum-name :enum-salary
           :locale/zh-tw "薪資類別"}
          "月薪" "計時" "計件"]
 
         :enum-employee
         [:enum
          {:error/message "should be: 回聘|契約正式|契約工讀|計時|計件"
+          :enum-name :enum-employee
           :locale/zh-tw "員工類別"}
          "回聘" "契約正式" "契約工讀" "計時" "計件"]
 
         :enum-price
         [:enum
          {:error/message "should be: 直接費用|間接費用|研發費用|推銷費用|管理費用|製造費用"
+          :enum-name :enum-price
           :locale/zh-tw "費用類別"}
          "直接費用" "間接費用" "研發費用" "推銷費用" "管理費用" "製造費用"]
 
         :enum-change
         [:enum
          {:error/message "should be: 到職|離職|復職|停職"
+          :enum-name :enum-change
           :locale/zh-tw "員工異動類別"}
          "到職" "離職" "復職" "停職"]
 
         :enum-month-period
         [:enum
          {:error/message "should be: 上期|下期"
+          :enum-name :enum-month-period
           :locale/zh-tw "月薪期別"}
          "上期" "下期"]}
  :model {:employee
@@ -96,6 +103,7 @@
                        :locale/zh-tw "id"} pos-int?]
           [:change/employee-id {:locale/zh-tw "員工基本資料檔id"} pos-int?]
           [:change/change-kind {:locale/zh-tw "異動類別"} :enum-change]
+          [:employee/change-day {:locale/zh-tw "異動日期"} :local-date]
           [:employee/created-at {:locale/zh-tw "建立時間"
                                  :auto true} :local-date-time]
           [:employee/memo {:locale/zh-tw "備註"

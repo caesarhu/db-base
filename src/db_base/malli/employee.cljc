@@ -6,11 +6,9 @@
 
 (def taiwan-id
   (m/-simple-schema
-    {:type :taiwan-id
+    {:type :string
      :pred id/some-id?
      :type-properties {:error/message "必須是身分證號或外籍證號"
-                       :json-schema/type "string"
-                       :json-schema/format "string"
                        :gen/gen id/taiwan-gen}}))
 
 (def company-id
@@ -40,11 +38,9 @@
 
 (def name-schema
   (m/-simple-schema
-    {:type :name
+    {:type :string
      :pred string?
      :type-properties {:error/message "必須是姓名-2位以上字串"
-                       :json-schema/type "string"
-                       :json-schema/format "string"
                        :gen/gen gen-name}}))
 
 (def unit-id
@@ -69,11 +65,9 @@
 
 (def address
   (m/-simple-schema
-    {:type :address
+    {:type :string
      :pred string?
      :type-properties {:error/message "必須是地址"
-                       :json-schema/type "string"
-                       :json-schema/format "string"
                        :gen/gen addr/gen-address}}))
 
 (def employee-schema

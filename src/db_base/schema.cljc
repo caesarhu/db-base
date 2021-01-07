@@ -41,13 +41,6 @@
   []
   (:enum (db-schema)))
 
-;;; 加入enum 及 employee 的欄位 malli 定義
-
-(register-map! (db-enums))
-(register-map! employee/employee-schema)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defn db-models
   []
   (:model (db-schema)))
@@ -55,3 +48,13 @@
 (defn register-model!
   []
   (model/register! (db-models)))
+
+;;; 加入enum employee 的欄位 malli 定義及model定義
+
+(defn register-all!
+  []
+  (register-map! (db-enums))
+  (register-map! employee/employee-schema)
+  (register-model!))
+
+(register-all!)
