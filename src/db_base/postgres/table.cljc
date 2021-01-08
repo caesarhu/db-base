@@ -66,7 +66,7 @@
 (defmethod fn-handler "generate" [_ & args]
   (let [generate-type (or (first args)
                           "ALWAYS")]
-    (str "GENERATE " generate-type " AS IDENTITY")))
+    (str "GENERATED " generate-type " AS IDENTITY")))
 
 (defn column-auto
   [field]
