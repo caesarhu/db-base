@@ -1,0 +1,1 @@
+{:up ["CREATE TYPE enum_salary AS ENUM ('月薪', '計時', '計件');"], :down ["DROP TYPE IF EXISTS enum_salary CASCADE;"], :id "002-enum-salary"}

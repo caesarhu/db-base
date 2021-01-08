@@ -1,0 +1,1 @@
+{:up ["CREATE TYPE enum_price AS ENUM ('直接費用', '間接費用', '研發費用', '推銷費用', '管理費用', '製造費用');"], :down ["DROP TYPE IF EXISTS enum_price CASCADE;"], :id "004-enum-price"}

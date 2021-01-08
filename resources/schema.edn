@@ -1,6 +1,7 @@
 {:enum {:enum-gender
         [:enum
          {:error/message "should be: 男|女"
+          :id "000-enum-gender"
           :enum-name :enum-gender
           :locale/zh-tw "性別"}
          "男" "女"]
@@ -8,6 +9,7 @@
         :enum-direct
         [:enum
          {:error/message "should be: 直接|間接"
+          :id "001-enum-direct"
           :enum-name :enum-direct
           :locale/zh-tw "間直接"}
          "直接" "間接"]
@@ -15,6 +17,7 @@
         :enum-salary
         [:enum
          {:error/message "should be: 月薪|計時|計件"
+          :id "002-enum-salary"
           :enum-name :enum-salary
           :locale/zh-tw "薪資類別"}
          "月薪" "計時" "計件"]
@@ -22,6 +25,7 @@
         :enum-employee
         [:enum
          {:error/message "should be: 回聘|契約正式|契約工讀|計時|計件"
+          :id "003-enum-employee"
           :enum-name :enum-employee
           :locale/zh-tw "員工類別"}
          "回聘" "契約正式" "契約工讀" "計時" "計件"]
@@ -29,6 +33,7 @@
         :enum-price
         [:enum
          {:error/message "should be: 直接費用|間接費用|研發費用|推銷費用|管理費用|製造費用"
+          :id "004-enum-price"
           :enum-name :enum-price
           :locale/zh-tw "費用類別"}
          "直接費用" "間接費用" "研發費用" "推銷費用" "管理費用" "製造費用"]
@@ -36,6 +41,7 @@
         :enum-change
         [:enum
          {:error/message "should be: 到職|離職|復職|停職"
+          :id "005-enum-change"
           :enum-name :enum-change
           :locale/zh-tw "員工異動類別"}
          "到職" "離職" "復職" "停職"]
@@ -43,11 +49,13 @@
         :enum-month-period
         [:enum
          {:error/message "should be: 上期|下期"
+          :id "006-enum-month-period"
           :enum-name :enum-month-period
           :locale/zh-tw "月薪期別"}
          "上期" "下期"]}
  :model {:employee
          [:map {:locale/zh-tw "員工基本資料檔"
+                :id "100-employee"
                 :has-many {:employee/changes {:model :change :through :change/employee-id}}}
           [:employee/id {:primary-key true
                          :auto true
@@ -83,6 +91,7 @@
           [:employee/mobile {:locale/zh-tw "行動電話"
                              :optional true} [:maybe :employee/mobile]]
           [:employee/education {:locale/zh-tw "學歷"
+                                :default "高中畢業"
                                 :optional true} [:maybe string?]]
           [:employee/education-period {:locale/zh-tw "修業期間"
                                        :optional true} [:maybe string?]]
@@ -97,14 +106,16 @@
 
          :change
          [:map {:locale/zh-tw "員工異動檔"
+                :id "101-change"
                 :belongs-to {:change/employee {:model :employee :through :change/employee-id}}}
           [:change/id {:primary-key true
                        :auto true
                        :locale/zh-tw "id"} pos-int?]
           [:change/employee-id {:locale/zh-tw "員工基本資料檔id"} pos-int?]
           [:change/change-kind {:locale/zh-tw "異動類別"} :enum-change]
-          [:employee/change-day {:locale/zh-tw "異動日期"} :local-date]
-          [:employee/created-at {:locale/zh-tw "建立時間"
-                                 :auto true} :local-date-time]
-          [:employee/memo {:locale/zh-tw "備註"
-                           :optional true} [:maybe string?]]]}}
+          [:change/change-day {:locale/zh-tw "異動日期"
+                               :default :CURRENT_DATE} :local-date]
+          [:change/created-at {:locale/zh-tw "建立時間"
+                               :auto true} :local-date-time]
+          [:change/memo {:locale/zh-tw "備註"
+                         :optional true} [:maybe string?]]]}}

@@ -1,7 +1,9 @@
 (ns db-base.postgres.enum
   (:require [malli.core :as m]
+            [clojure.java.io :as io]
             [db-base.postgres.utils :as utils]
-            [camel-snake-kebab.core :as csk]))
+            [camel-snake-kebab.core :as csk]
+            [db-base.config :as config]))
 
 (defn get-enum-name
   [enum]
@@ -27,5 +29,17 @@
 
 (defn generate-enum-edn
   [enum]
-  {:up (vector (create-enum enum))
-   :down (vector (drop-enum enum))})
+  (let [base {:up (vector (create-enum enum))
+              :down (vector (drop-enum enum))}
+        id (get (m/properties enum) :id)]
+    (if id
+      (assoc base :id id)
+      base)))
+
+(defn spit-enum-edn
+  ([path enum]
+   (spit path (generate-enum-edn enum)))
+  ([enum]
+   (let [dir (str "resources/" (:migration-dir @config/config))
+         path (str dir "/" (get (m/properties enum) :id) ".edn")]
+     (spit-enum-edn path enum))))

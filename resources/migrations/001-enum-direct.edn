@@ -1,0 +1,1 @@
+{:up ["CREATE TYPE enum_direct AS ENUM ('直接', '間接');"], :down ["DROP TYPE IF EXISTS enum_direct CASCADE;"], :id "001-enum-direct"}
