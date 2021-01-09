@@ -2,6 +2,7 @@
   (:require [fipp.edn :refer [pprint]]
             [clojure.spec.alpha :as spec.alpha]
             [aero.core :as aero]
+            [kaocha.repl :as k]
             [expound.alpha :as expound]
             [orchestra.spec.test :as stest]
             [db-base.config :as config]
@@ -22,6 +23,10 @@
   (reset)
   (stop)
   system)
+
+(defn unit-test
+  []
+  (k/run :unit))
 
 
 ;;; expound and Orchestra

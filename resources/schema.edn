@@ -91,7 +91,6 @@
           [:employee/mobile {:locale/zh-tw "行動電話"
                              :optional true} [:maybe :employee/mobile]]
           [:employee/education {:locale/zh-tw "學歷"
-                                :default "高中畢業"
                                 :optional true} [:maybe string?]]
           [:employee/education-period {:locale/zh-tw "修業期間"
                                        :optional true} [:maybe string?]]

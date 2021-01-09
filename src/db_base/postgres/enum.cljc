@@ -1,9 +1,9 @@
 (ns db-base.postgres.enum
   (:require [malli.core :as m]
-            [clojure.java.io :as io]
             [db-base.postgres.utils :as utils]
             [camel-snake-kebab.core :as csk]
-            [db-base.config :as config]))
+            [db-base.config :as config]
+            [honeysql-postgres.util :refer [comma-join-args]]))
 
 (defn get-enum-name
   [enum]
@@ -14,7 +14,10 @@
 (defn create-enum
   [enum]
   (let [values (m/children enum)
-        values-str (utils/comma-join-args values)]
+        values-str (->> values
+                        (map utils/quotation-str)
+                        (map keyword)
+                        comma-join-args)]
     (str "CREATE TYPE "
          (csk/->snake_case_string (get-enum-name enum))
          " AS ENUM "
@@ -38,7 +41,7 @@
 
 (defn spit-enum-edn
   ([path enum]
-   (spit path (generate-enum-edn enum)))
+   (spit path (utils/pretty-format (generate-enum-edn enum))))
   ([enum]
    (let [dir (str "resources/" (:migration-dir @config/config))
          path (str dir "/" (get (m/properties enum) :id) ".edn")]

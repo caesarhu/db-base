@@ -1,6 +1,5 @@
 (ns db-base.postgres.core
   (:require
-    [db-base.config :as config]
     [db-base.schema :as db-schema]
     [db-base.postgres.enum :as enum]
     [db-base.postgres.table :as table]
@@ -13,3 +12,8 @@
 (defn spit-table-all
   []
   (mapv table/spit-table-edn (vals @gm/models)))
+
+(defn spit-edn-all
+  []
+  (spit-enum-all)
+  (spit-table-all))

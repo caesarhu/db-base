@@ -3,13 +3,13 @@
             [honeysql.core :as sql]
             [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
             [honeysql-postgres.helpers :as psqlh]
-            [honeysql-postgres.format]
+            [honeysql-postgres.format] ; must require honeysql-postgres.format for format
             [gungnir.model :as gm]
             [gungnir.field :as gf]
             [db-base.postgres.enum :as enum]
             [db-base.schema :as db-schema]
             [camel-snake-kebab.core :as csk]
-            [sql-formatter.core :as sf]
+            [db-base.postgres.utils :as utils]
             [db-base.config :as config]))
 
 (def type-keys
@@ -120,7 +120,7 @@
   (-> (psqlh/create-table {} (gm/table model))
       (psqlh/with-columns (model-columns model))
       sql/format
-      sf/sql-command
+      utils/sql-command
       (str ";")))
 
 (defn drop-table
@@ -140,7 +140,7 @@
 
 (defn spit-table-edn
   ([path model]
-   (spit path (generate-table-edn model)))
+   (spit path (utils/pretty-format (generate-table-edn model))))
   ([model]
    (let [dir (str "resources/" (:migration-dir @config/config))
          path (str dir "/" (get (m/properties model) :id) ".edn")]
