@@ -3,6 +3,7 @@
             [honeysql.core :as sql]
             [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
             [honeysql-postgres.helpers :as psqlh]
+            [honeysql-postgres.util :refer [comma-join-args]]
             [honeysql-postgres.format] ; must require honeysql-postgres.format for format
             [gungnir.model :as gm]
             [gungnir.field :as gf]
@@ -63,10 +64,16 @@
   (when-not (= :maybe (m/type (last field)))
     (sql/call :not nil)))
 
-(defmethod fn-handler "generate" [_ & args]
+(defmethod fn-handler "generated" [_ & args]
   (let [generate-type (or (first args)
                           "ALWAYS")]
     (str "GENERATED " generate-type " AS IDENTITY")))
+
+(defmethod fn-handler "references" [_ reftable refcolumn on-delete on-update]
+  (let [base (str "REFERENCES " (sqlf/to-sql reftable) (sqlf/paren-wrap (sqlf/to-sql refcolumn)))]
+    (cond-> base
+      on-delete (str " ON DELETE " (sqlf/to-sql on-delete))
+      on-update (str " ON UPDATE " (sqlf/to-sql on-update)))))
 
 (defn column-auto
   [field]
@@ -76,25 +83,31 @@
     (when (get-property :auto)
       (cond
         (and (get-property :primary-key)
-             (= :bigint f-type)) (sql/call :generate)
+             (= :bigint f-type)) (sql/call :generated)
         (= :date f-type) (sql/call :default :CURRENT_DATE)
         (= :timestamp f-type) (sql/call :default :CURRENT_TIMESTAMP)))))
 
 (def column-call-set
-  (set [:primary-key :unique :default]))
+  (set [:primary-key :unique :default :references]))
+
+(defn sql-call
+  [property-key property]
+  (when property
+    (let [s-key (-> property-key name keyword)]
+      (cond
+        (true? property) (sql/call s-key)
+        (coll? property) (apply sql/call s-key property)
+        :else (sql/call s-key property)))))
 
 (defn column-sql-call
   [field]
   (let [properties (gf/properties field)
         get-property #(get properties %)
-        sql-call (fn [property-key]
-                   (let [property (get-property property-key)]
-                     (when (and (contains? column-call-set property-key)
-                                property)
-                       (if (true? property)
-                         (sql/call property-key)
-                         (sql/call property-key property)))))]
-    (->> (map sql-call (keys properties))
+        column-attr (fn [property-key]
+                      (let [property (get-property property-key)]
+                        (when (contains? column-call-set property-key)
+                          (sql-call property-key property))))]
+    (->> (map column-attr (keys properties))
          (filter some?))))
 
 (defn field->column
@@ -129,9 +142,35 @@
        (csk/->snake_case_string (gm/table model))
        " CASCADE;"))
 
+(defmethod fn-handler "create-index" [_ index-name unique? table & columns]
+  (let [unique (when (or (= :unique unique?)
+                         (true? unique?))
+                 "UNIQUE ")]
+    (str "CREATE " unique "INDEX "
+         (sqlf/to-sql index-name)
+         " ON "
+         (sqlf/to-sql table)
+         " "
+         (comma-join-args columns)
+         ";")))
+
+(defn create-index
+  [model]
+  (when-let [index-property (-> (gm/properties model)
+                                :create-index)]
+    (if (coll? (first index-property))
+      (->> (map #(apply sql/call :create-index %) index-property)
+           (map sql/format)
+           flatten)
+      (->> (apply sql/call :create-index index-property)
+           sql/format))))
+
 (defn generate-table-edn
   [model]
-  (let [base {:up (vector (create-table model))
+  (let [base {:up (->> (vector (create-table model) (create-index model))
+                       flatten
+                       (filter some?)
+                       vec)
               :down (vector (drop-table model))}
         id (get (gm/properties model) :id)]
     (if id

@@ -55,6 +55,7 @@
          "上期" "下期"]}
  :model {:employee
          [:map {:locale/zh-tw "員工基本資料檔"
+                :create-index [:idx_employee_by_name :not-unique :employee :name]
                 :id "100-employee"
                 :has-many {:employee/changes {:model :change :through :change/employee-id}}}
           [:employee/id {:primary-key true
@@ -110,7 +111,8 @@
           [:change/id {:primary-key true
                        :auto true
                        :locale/zh-tw "id"} pos-int?]
-          [:change/employee-id {:locale/zh-tw "員工基本資料檔id"} pos-int?]
+          [:change/employee-id {:locale/zh-tw "員工基本資料檔id"
+                                :references [:employee :id :CASCADE :CASCADE]} pos-int?]
           [:change/change-kind {:locale/zh-tw "異動類別"} :enum-change]
           [:change/change-day {:locale/zh-tw "異動日期"
                                :default :CURRENT_DATE} :local-date]
