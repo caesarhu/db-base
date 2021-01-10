@@ -55,6 +55,6 @@
   []
   (register-map! (db-enums))
   (register-map! employee/employee-schema)
-  (register-model!))
+  (model/register! (db-models)))
 
-(register-all!)
+;(register-all!)

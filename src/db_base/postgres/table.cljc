@@ -3,8 +3,8 @@
             [honeysql.core :as sql]
             [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
             [honeysql-postgres.helpers :as psqlh]
-            [honeysql-postgres.util :refer [comma-join-args]]
             [honeysql-postgres.format] ; must require honeysql-postgres.format for format
+            [db-base.postgres.format] ; must require after honeysql-postgres.format
             [gungnir.model :as gm]
             [gungnir.field :as gf]
             [db-base.postgres.enum :as enum]
@@ -64,17 +64,6 @@
   (when-not (= :maybe (m/type (last field)))
     (sql/call :not nil)))
 
-(defmethod fn-handler "generated" [_ & args]
-  (let [generate-type (or (first args)
-                          "ALWAYS")]
-    (str "GENERATED " generate-type " AS IDENTITY")))
-
-(defmethod fn-handler "references" [_ reftable refcolumn on-delete on-update]
-  (let [base (str "REFERENCES " (sqlf/to-sql reftable) (sqlf/paren-wrap (sqlf/to-sql refcolumn)))]
-    (cond-> base
-      on-delete (str " ON DELETE " (sqlf/to-sql on-delete))
-      on-update (str " ON UPDATE " (sqlf/to-sql on-update)))))
-
 (defn column-auto
   [field]
   (let [properties (gf/properties field)
@@ -130,29 +119,15 @@
 
 (defn create-table
   [model]
-  (-> (psqlh/create-table {} (gm/table model))
-      (psqlh/with-columns (model-columns model))
-      sql/format
-      utils/sql-command
-      (str ";")))
+  (let [sql-map (-> (psqlh/create-table {} (gm/table model))
+                    (psqlh/with-columns (model-columns model)))]
+    (sql/format sql-map :parameterizer :none)))
 
 (defn drop-table
   [model]
   (str "DROP TABLE IF EXISTS "
        (csk/->snake_case_string (gm/table model))
        " CASCADE;"))
-
-(defmethod fn-handler "create-index" [_ index-name unique? table & columns]
-  (let [unique (when (or (= :unique unique?)
-                         (true? unique?))
-                 "UNIQUE ")]
-    (str "CREATE " unique "INDEX "
-         (sqlf/to-sql index-name)
-         " ON "
-         (sqlf/to-sql table)
-         " "
-         (comma-join-args columns)
-         ";")))
 
 (defn create-index
   [model]

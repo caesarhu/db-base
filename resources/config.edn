@@ -36,4 +36,5 @@
                          :rolling (db-base.config/rolling-appender #ref [:appender-opts])}})}
 
   :system
-  {:stop (redelay.core/stop)}}}
+  {:start (db-base.schema/register-all!)
+   :stop (redelay.core/stop)}}}

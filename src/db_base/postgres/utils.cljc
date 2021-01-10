@@ -33,3 +33,19 @@
     (binding [*out* w]
       (pprint obj)
       (str w))))
+
+(defn to-sql-arg
+  [arg]
+  (if (string? arg)
+    arg
+    (sqlf/to-sql arg)))
+
+(defn comma-join-args
+  "Returns the args comma-joined after applying to-sql to them"
+  [args]
+  (if (nil? args)
+    ""
+    (->> args
+         (map to-sql-arg)
+         sqlf/comma-join
+         sqlf/paren-wrap)))
