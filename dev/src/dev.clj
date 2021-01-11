@@ -9,6 +9,7 @@
     [expound.alpha :as expound]
     [fipp.edn :refer [pprint]]
     [gungnir.changeset :as gc]
+    [gungnir.database]
     [gungnir.field :as gf]
     [gungnir.model :as gm]
     [gungnir.query :as gq]
@@ -17,7 +18,8 @@
     [malli.core :as m]
     [malli.error :as me]
     [malli.generator :as mg]
-    [orchestra.spec.test :as stest]))
+    [orchestra.spec.test :as stest]
+    [db-base.postgres.core :refer [spit-edn-all]]))
 
 
 (set-init! (fn [] @config/config))

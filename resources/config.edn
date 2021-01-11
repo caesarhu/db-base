@@ -35,6 +35,9 @@
              :appenders {:println {:min-level :info}
                          :rolling (db-base.config/rolling-appender #ref [:appender-opts])}})}
 
+  :db {:start (db-base.config/setup-db)
+       :stop (hikari/close-datasource this)}
+
   :system
   {:start (db-base.schema/register-all!)
    :stop (redelay.core/stop)}}}
