@@ -7,7 +7,7 @@
             [orchestra.spec.test :as stest]
             [db-base.config :as config]
             [clojure.tools.gitlibs :as gl]
-            [db-base.ragtime :refer [migrate rollback reset-db]]
+            [db-base.ragtime :refer [migrate rollback clear-db reset-db]]
             [juxt.clip.repl :refer [start stop set-init! reset system]]
             [malli.core :as m]
             [malli.error :as me]

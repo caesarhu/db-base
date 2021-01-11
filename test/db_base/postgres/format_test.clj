@@ -42,3 +42,19 @@
                 (-> (sql/call :references :table :employee :column :id :on-delete "RESTRICT"  :on-update "CASCADE")
                     sql/format)))))
 
+(test/deftest create-index-test
+  (test/testing "testing fn-handler create-index"
+    (test/is (= ["CREATE INDEX idx_employee_by_name ON employee(name);"]
+                (-> (sql/call :create-index :index-name :idx_employee_by_name
+                              :table :employee :column :name)
+                    sql/format)))
+    (test/is (= ["CREATE INDEX idx_employee_by_name ON employee(unit_id, name);"]
+                (-> (sql/call :create-index :index-name :idx_employee_by_name
+                              :table :employee :column [:unit-id :name])
+                    sql/format)))
+    (test/is (= ["CREATE UNIQUE INDEX idx_employee_by_name ON employee(unit_id, name);"]
+                (-> (sql/call :create-index :index-name :idx_employee_by_name
+                              :table :employee :column [:unit-id :name]
+                              :unique true)
+                    sql/format)))))
+

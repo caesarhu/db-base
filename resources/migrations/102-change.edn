@@ -1,3 +1,3 @@
 {:up ["CREATE TABLE change (id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY, employee_id bigint NOT NULL REFERENCES employee(id) ON DELETE CASCADE ON UPDATE CASCADE, change_kind enum_change NOT NULL, change_day date NOT NULL DEFAULT CURRENT_DATE, created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, memo text);"],
  :down ["DROP TABLE IF EXISTS change CASCADE;"],
- :id "101-change"}
+ :id "102-change"}

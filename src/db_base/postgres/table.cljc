@@ -35,7 +35,7 @@
                               {:cause ::field-type
                                :schema schema}))))))
 
-(def ->postgres-table
+(def ->postgres-type
   [[(set [:re :string 'string?]) :text]
    [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) :bigint]
    [(set ['float?, 'double?, 'decimal?, :double]) :decimal]
@@ -50,7 +50,7 @@
                   (let [[ts pt] tv]
                     (when (contains? ts type)
                       pt)))]
-    (if-let [postgres-type (some type-fn ->postgres-table)]
+    (if-let [postgres-type (some type-fn ->postgres-type)]
       postgres-type
       (when (keyword? type)
         type))))
@@ -121,12 +121,15 @@
   [model]
   (let [sql-map (-> (psqlh/create-table {} (gm/table model))
                     (psqlh/with-columns (model-columns model)))]
-    (sql/format sql-map :parameterizer :none)))
+    (-> (sql/format sql-map :parameterizer :none)
+        first
+        (str ";"))))
 
 (defn drop-table
   [model]
   (str "DROP TABLE IF EXISTS "
-       (csk/->snake_case_string (gm/table model))
+       (-> model gm/table utils/to-sql-arg)
+       ;(csk/->snake_case_string (gm/table model))
        " CASCADE;"))
 
 (defn create-index

@@ -16,7 +16,7 @@
   (when-let [locale (get-locale field-key)]
     [field-key locale]))
 
-(defn model-dict
+(defn model-key-dict
   [model-key]
   (when-let [locale-table (get-locale model-key)]
     (let [pairs (->> (map entry-pair (gm/keys model-key))
@@ -25,6 +25,12 @@
           half-map (->> (map #(hash-map (first %) (keyword locale-table (last %))) pairs)
                         (apply merge (hash-map table (keyword locale-table))))]
       (merge half-map (clojure.set/map-invert half-map)))))
+
+(defn model-dict
+  [model]
+  (-> model
+      gm/table
+      model-key-dict))
 
 (defn translate
   [dict-map k]

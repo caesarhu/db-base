@@ -15,9 +15,13 @@
   ([n]
    (repl/rollback (eval (:ragtime-config @config/config)) n)))
 
-(defn reset-db
+(defn clear-db
   []
   (let [migrations (count @repl/migration-index)]
-    (rollback migrations)
-    (reset! repl/migration-index {})
-    (migrate)))
+    (rollback migrations)))
+
+(defn reset-db
+  []
+  (clear-db)
+  (reset! repl/migration-index {})
+  (migrate))

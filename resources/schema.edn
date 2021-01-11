@@ -55,8 +55,10 @@
          "上期" "下期"]}
  :model {:employee
          [:map {:locale/zh-tw "員工基本資料檔"
-                :create-index [:idx_employee_by_name :not-unique :employee :name]
-                :id "100-employee"
+                :create-index [:index-name :idx_employee_by_name
+                               :table :employee
+                               :column :name]
+                :id "101-employee"
                 :has-many {:employee/changes {:model :change :through :change/employee-id}}}
           [:employee/id {:primary-key true
                          :auto true
@@ -106,7 +108,7 @@
 
          :change
          [:map {:locale/zh-tw "員工異動檔"
-                :id "101-change"
+                :id "102-change"
                 :belongs-to {:change/employee {:model :employee :through :change/employee-id}}}
           [:change/id {:primary-key true
                        :auto true
