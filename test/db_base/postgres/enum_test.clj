@@ -3,12 +3,12 @@
     [clojure.test :as test]
     [db-base.postgres.enum :as enum]
     [db-base.schema :as db-schema]
-    [db-base.test-utils :refer [instrument-specs]]))
+    [db-base.test-utils :refer [my-fixtures]]))
 
 
 (test/use-fixtures
   :once
-  instrument-specs)
+  my-fixtures)
 
 
 (def enum-employee

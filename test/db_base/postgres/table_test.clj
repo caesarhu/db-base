@@ -3,14 +3,12 @@
     [clojure.test :as test]
     [db-base.postgres.table :as table]
     [db-base.schema :as db-schema]
-    [db-base.test-utils :refer [instrument-specs]]
+    [db-base.test-utils :refer [my-fixtures]]
     [gungnir.model :as gm]))
 
 (test/use-fixtures
   :once
-  instrument-specs)
-
-(db-schema/register-all!)
+  my-fixtures)
 
 (def table-employee
   {:up ["CREATE TABLE employee (id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY, taiwan_id text NOT NULL UNIQUE, company_id text NOT NULL UNIQUE, name text NOT NULL, birthday date NOT NULL, gender enum_gender NOT NULL, direct_kind enum_direct NOT NULL, employee_kind enum_employee NOT NULL, price_kind enum_price NOT NULL, reg_addr text NOT NULL, mail_addr text, unit_id text NOT NULL, bank_id bigint REFERENCES bank(id) ON DELETE RESTRICT ON UPDATE CASCADE, account text, work_place text, factory text, job_title text, job_title_2 text, phone text, mobile text, education text, education_period text, exception bytea, memo text, created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP);"

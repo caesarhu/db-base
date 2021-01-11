@@ -3,16 +3,13 @@
     [clojure.test :as test]
     [db-base.postgres.format] ; must require for honeysql format
     [db-base.schema :as db-schema]
-    [db-base.test-utils :refer [instrument-specs]]
+    [db-base.test-utils :refer [my-fixtures]]
     [honeysql-postgres.helpers :as psqlh]
     [honeysql.core :as sql]))
 
 (test/use-fixtures
   :once
-  instrument-specs)
-
-
-(db-schema/register-all!)
+  my-fixtures)
 
 
 (test/deftest generated-test

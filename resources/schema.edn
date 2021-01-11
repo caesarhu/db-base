@@ -55,7 +55,7 @@
          "上期" "下期"]}
  :model {:employee
          [:map {:locale/zh-tw "員工基本資料檔"
-                :create-index [:index-name :idx_employee_by_name
+                :create-index [:index-name :idx-employee-by-name
                                :table :employee
                                :column :name]
                 :id "101-employee"

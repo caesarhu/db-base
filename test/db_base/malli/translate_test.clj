@@ -3,13 +3,13 @@
     [clojure.test :as test]
     [db-base.malli.translate :as mt]
     [db-base.schema :as db-schema]
-    [db-base.test-utils :refer [instrument-specs]]
+    [db-base.test-utils :refer [my-fixtures]]
     [gungnir.model :as gm]))
 
 
 (test/use-fixtures
   :once
-  instrument-specs)
+  my-fixtures)
 
 
 (db-schema/register-all!)
