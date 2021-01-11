@@ -5,7 +5,9 @@
     [db-base.malli.employee :as employee]
     [db-base.malli.malli-time :as time]
     [gungnir.model :as model]
+    [medley.core :as medley]
     [malli.core :as m]
+    [malli.util :as mu]
     [malli.registry :as mr]))
 
 
@@ -49,7 +51,10 @@
 
 (defn db-enums
   []
-  (:enum (db-schema)))
+  (medley/map-kv-vals
+    (fn [k v]
+      (mu/update-properties v assoc :enum-name k))
+    (:enum (db-schema))))
 
 
 (defn db-models

@@ -2,7 +2,7 @@
         [:enum
          {:error/message "should be: 男|女"
           :id "000-enum-gender"
-          :enum-name :enum-gender
+          ;:enum-name :enum-gender
           :locale/zh-tw "性別"}
          "男" "女"]
 
@@ -10,7 +10,7 @@
         [:enum
          {:error/message "should be: 直接|間接"
           :id "001-enum-direct"
-          :enum-name :enum-direct
+          ;:enum-name :enum-direct
           :locale/zh-tw "間直接"}
          "直接" "間接"]
 
@@ -18,7 +18,7 @@
         [:enum
          {:error/message "should be: 月薪|計時|計件"
           :id "002-enum-salary"
-          :enum-name :enum-salary
+          ;:enum-name :enum-salary
           :locale/zh-tw "薪資類別"}
          "月薪" "計時" "計件"]
 
@@ -26,7 +26,7 @@
         [:enum
          {:error/message "should be: 回聘|契約正式|契約工讀|計時|計件"
           :id "003-enum-employee"
-          :enum-name :enum-employee
+          ;:enum-name :enum-employee
           :locale/zh-tw "員工類別"}
          "回聘" "契約正式" "契約工讀" "計時" "計件"]
 
@@ -34,7 +34,7 @@
         [:enum
          {:error/message "should be: 直接費用|間接費用|研發費用|推銷費用|管理費用|製造費用"
           :id "004-enum-price"
-          :enum-name :enum-price
+          ;:enum-name :enum-price
           :locale/zh-tw "費用類別"}
          "直接費用" "間接費用" "研發費用" "推銷費用" "管理費用" "製造費用"]
 
@@ -42,7 +42,7 @@
         [:enum
          {:error/message "should be: 到職|離職|復職|停職"
           :id "005-enum-change"
-          :enum-name :enum-change
+          ;:enum-name :enum-change
           :locale/zh-tw "員工異動類別"}
          "到職" "離職" "復職" "停職"]
 
@@ -50,7 +50,7 @@
         [:enum
          {:error/message "should be: 上期|下期"
           :id "006-enum-month-period"
-          :enum-name :enum-month-period
+          ;:enum-name :enum-month-period
           :locale/zh-tw "月薪期別"}
          "上期" "下期"]}
  :model {:employee
@@ -113,6 +113,9 @@
          :change
          [:map {:locale/zh-tw "員工異動檔"
                 :id "102-change"
+                :create-index [:index-name :idx-change-by-employee-id
+                               :table :change
+                               :column :employee-id]
                 :belongs-to {:change/employee {:model :employee :through :change/employee-id}}}
           [:change/id {:primary-key true
                        :auto true

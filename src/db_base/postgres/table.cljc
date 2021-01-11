@@ -2,13 +2,13 @@
   (:require
     [db-base.config :as config]
     [db-base.postgres.enum :as enum]
-    [db-base.postgres.format] ; must require for honeysql format
     [db-base.postgres.utils :as utils]
     [db-base.schema :as db-schema]
     [gungnir.field :as gf]
     [gungnir.model :as gm]
     [honeysql-postgres.helpers :as psqlh]
     [honeysql.core :as sql]
+    [db-base.postgres.format] ; must require for honeysql format
     [malli.core :as m]))
 
 
