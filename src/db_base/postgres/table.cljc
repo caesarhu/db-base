@@ -9,7 +9,6 @@
             [gungnir.field :as gf]
             [db-base.postgres.enum :as enum]
             [db-base.schema :as db-schema]
-            [camel-snake-kebab.core :as csk]
             [db-base.postgres.utils :as utils]
             [db-base.config :as config]))
 
@@ -129,7 +128,6 @@
   [model]
   (str "DROP TABLE IF EXISTS "
        (-> model gm/table utils/to-sql-arg)
-       ;(csk/->snake_case_string (gm/table model))
        " CASCADE;"))
 
 (defn create-index

@@ -59,6 +59,7 @@
                                :table :employee
                                :column :name]
                 :id "101-employee"
+                :belongs-to {:employee/bank {:model :bank :through :employee/id}}
                 :has-many {:employee/changes {:model :change :through :change/employee-id}}}
           [:employee/id {:primary-key true
                          :auto true
@@ -77,8 +78,11 @@
           [:employee/mail-addr {:locale/zh-tw "通訊地址"
                                 :optional true} [:maybe :employee/mail-addr]]
           [:employee/unit-id {:locale/zh-tw "單位代號"} :employee/unit-id]
-          [:employee/bank-id {:locale/zh-tw "銀行代號"
-                              :optional true} [:maybe :employee/bank-id]]
+          [:employee/bank-id
+           {:locale/zh-tw "銀行代號"
+            :references [:table :bank :column :id :on-delete "RESTRICT" :on-update "CASCADE"]
+            :optional true}
+           [:maybe pos-int?]]
           [:employee/account {:locale/zh-tw "銀行帳號"
                               :optional true} [:maybe :employee/account]]
           [:employee/work-place {:locale/zh-tw "工作地"
@@ -123,4 +127,17 @@
           [:change/created-at {:locale/zh-tw "建立時間"
                                :auto true} :local-date-time]
           [:change/memo {:locale/zh-tw "備註"
-                         :optional true} [:maybe string?]]]}}
+                         :optional true} [:maybe string?]]]
+
+         :bank
+         [:map {:locale/zh-tw "銀行一覽表"
+                :id "100-bank"
+                :has-many {:bank/employees {:model :employee :through :employee/bank-id}}}
+          [:bank/id {:primary-key true
+                     :auto true
+                     :locale/zh-tw "id"} pos-int?]
+          [:bank/bank-id {:unique true
+                          :locale/zh-tw "銀行代號"} :employee/bank-id]
+          [:bank/name {:locale/zh-tw "銀行名稱"} string?]
+          [:bank/memo {:locale/zh-tw "備註"
+                       :optional true} [:maybe string?]]]}}
