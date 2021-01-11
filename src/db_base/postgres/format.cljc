@@ -1,13 +1,15 @@
 (ns db-base.postgres.format
   (:require
     [db-base.postgres.utils :refer [comma-join-args to-sql-arg]]
-    [honeysql.helpers :as sqlh]
-    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]))
+    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
+    [honeysql.helpers :as sqlh]))
+
 
 (defmethod fn-handler "generated" [_ & args]
   (let [generate-type (or (first args)
                           "ALWAYS")]
     (str "GENERATED " generate-type " AS IDENTITY")))
+
 
 (defmethod fn-handler "references" [_ & args]
   (let [args-map (apply hash-map args)
@@ -16,6 +18,7 @@
     (cond-> base
       on-delete (str " ON DELETE " (to-sql-arg on-delete))
       on-update (str " ON UPDATE " (to-sql-arg on-update)))))
+
 
 (defmethod fn-handler "create-index" [_ & args]
   (let [args-map (apply hash-map args)

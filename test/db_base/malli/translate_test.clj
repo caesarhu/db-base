@@ -1,19 +1,23 @@
 (ns db-base.malli.translate-test
   (:require
     [clojure.test :as test]
-    [db-base.test-utils :refer [instrument-specs]]
-    [db-base.schema :as db-schema]
     [db-base.malli.translate :as mt]
+    [db-base.schema :as db-schema]
+    [db-base.test-utils :refer [instrument-specs]]
     [gungnir.model :as gm]))
+
 
 (test/use-fixtures
   :once
   instrument-specs)
 
+
 (db-schema/register-all!)
+
 
 (def dict
   (mt/model-dict (:change @gm/models)))
+
 
 (test/deftest translate-test
   (test/testing "testing postgres/translate"

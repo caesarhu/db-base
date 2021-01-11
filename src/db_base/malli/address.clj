@@ -1,8 +1,10 @@
 (ns db-base.malli.address
-  (:require [db-base.config :as config]
-            [clojure.java.io :as io]
-            [clojure.test.check.generators :as gen]
-            [clojure.string :as string]))
+  (:require
+    [clojure.java.io :as io]
+    [clojure.string :as string]
+    [clojure.test.check.generators :as gen]
+    [db-base.config :as config]))
+
 
 (def addr-seq
   (let [addr-file (io/resource (:address-path @config/config))]
@@ -11,9 +13,11 @@
         str
         (string/split #"\r\n"))))
 
+
 (defn fake-number
   []
   (inc (rand-int 500)))
+
 
 (defn fake-address-number
   []
@@ -28,6 +32,7 @@
                 (str (inc (rand-int 20)) "樓"))]
     (str lane alley number floor)))
 
+
 (defn fake-address
   []
   (let [addr-head (apply str (-> (rand-nth addr-seq)
@@ -35,6 +40,7 @@
                                  drop-last
                                  rest))]
     (str addr-head (fake-address-number))))
+
 
 (def gen-address
   (gen/fmap (fn [_]

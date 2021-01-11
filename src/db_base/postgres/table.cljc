@@ -1,20 +1,25 @@
 (ns db-base.postgres.table
-  (:require [malli.core :as m]
-            [honeysql.core :as sql]
-            [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
-            [honeysql-postgres.helpers :as psqlh]
-            [honeysql-postgres.format] ; must require honeysql-postgres.format for format
-            [db-base.postgres.format] ; must require after honeysql-postgres.format
-            [gungnir.model :as gm]
-            [gungnir.field :as gf]
-            [db-base.postgres.enum :as enum]
-            [db-base.schema :as db-schema]
-            [db-base.postgres.utils :as utils]
-            [db-base.config :as config]))
+  (:require
+    [db-base.config :as config]
+    [db-base.postgres.enum :as enum]
+    ; must require honeysql-postgres.format for format
+    [db-base.postgres.format]
+    [db-base.postgres.utils :as utils]
+    [db-base.schema :as db-schema]
+    [gungnir.field :as gf]
+    ; must require after honeysql-postgres.format
+    [gungnir.model :as gm]
+    [honeysql-postgres.format]
+    [honeysql-postgres.helpers :as psqlh]
+    [honeysql.core :as sql]
+    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
+    [malli.core :as m]))
+
 
 (def type-keys
   (set (concat (keys (m/type-schemas))
                [:local-date :local-date-time])))
+
 
 (defn field-type
   [field]
@@ -34,6 +39,7 @@
                               {:cause ::field-type
                                :schema schema}))))))
 
+
 (def ->postgres-type
   [[(set [:re :string 'string?]) :text]
    [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) :bigint]
@@ -42,6 +48,7 @@
    [(set [:local-date-time 'inst?]) :timestamp]
    [(set [:boolean 'boolean?]) :boolean]
    [(set ['bytes?]) :bytea]])
+
 
 (defn type->postgres
   [type]
@@ -54,14 +61,17 @@
       (when (keyword? type)
         type))))
 
+
 (defn field->postgres-type
   [field]
   (-> field field-type type->postgres))
+
 
 (defn column-null
   [field]
   (when-not (= :maybe (m/type (last field)))
     (sql/call :not nil)))
+
 
 (defn column-auto
   [field]
@@ -75,8 +85,10 @@
         (= :date f-type) (sql/call :default :CURRENT_DATE)
         (= :timestamp f-type) (sql/call :default :CURRENT_TIMESTAMP)))))
 
+
 (def column-call-set
   (set [:primary-key :unique :default :references]))
+
 
 (defn sql-call
   [property-key property]
@@ -86,6 +98,7 @@
         (true? property) (sql/call s-key)
         (coll? property) (apply sql/call s-key property)
         :else (sql/call s-key property)))))
+
 
 (defn column-sql-call
   [field]
@@ -97,6 +110,7 @@
                           (sql-call property-key property))))]
     (->> (map column-attr (keys properties))
          (filter some?))))
+
 
 (defn field->column
   [field]
@@ -116,6 +130,7 @@
        (map #(gm/child model %))
        (map field->column)))
 
+
 (defn create-table
   [model]
   (let [sql-map (-> (psqlh/create-table {} (gm/table model))
@@ -124,11 +139,13 @@
         first
         (str ";"))))
 
+
 (defn drop-table
   [model]
   (str "DROP TABLE IF EXISTS "
        (-> model gm/table utils/to-sql-arg)
        " CASCADE;"))
+
 
 (defn create-index
   [model]
@@ -141,6 +158,7 @@
       (->> (apply sql/call :create-index index-property)
            sql/format))))
 
+
 (defn generate-table-edn
   [model]
   (let [base {:up (->> (vector (create-table model) (create-index model))
@@ -152,6 +170,7 @@
     (if id
       (assoc base :id id)
       base)))
+
 
 (defn spit-table-edn
   ([path model]

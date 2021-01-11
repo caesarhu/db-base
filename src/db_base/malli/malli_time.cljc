@@ -1,7 +1,9 @@
 (ns db-base.malli.malli-time
-  (:require [malli.core :as m]
-            [java-time :as jt]
-            [clojure.test.check.generators :as gen]))
+  (:require
+    [clojure.test.check.generators :as gen]
+    [java-time :as jt]
+    [malli.core :as m]))
+
 
 (defn date->str
   [d]
@@ -9,11 +11,13 @@
     (jt/format :iso-local-date d)
     d))
 
+
 (defn str->date
   [s]
   (if (string? s)
     (jt/local-date s)
     s))
+
 
 (defn date-time->str
   [t]
@@ -21,11 +25,13 @@
     (jt/format :iso-local-date t)
     t))
 
+
 (defn str->date-time
   [s]
   (if (string? s)
     (jt/local-date-time s)
     s))
+
 
 (defn rand-local-date
   ([start-date end-date]
@@ -36,20 +42,24 @@
   ([]
    (rand-local-date (jt/local-date 1920 1 1) (jt/local-date))))
 
+
 (def gen-local-date
   (gen/fmap (fn [_]
               (rand-local-date))
             gen/large-integer))
+
 
 (def gen-birthday
   (gen/fmap (fn [_]
               (rand-local-date (jt/local-date 1955 1 1) (jt/local-date 2002 12 31)))
             gen/large-integer))
 
+
 (def gen-local-date-time
   (gen/fmap #(-> (java.time.Instant/ofEpochMilli %)
                  (java.time.LocalDateTime/ofInstant java.time.ZoneOffset/UTC))
             gen/large-integer))
+
 
 (def gen-20years-local-date-time
   (gen/fmap (fn [_]
@@ -62,6 +72,7 @@
                 (-> (java.time.Instant/ofEpochMilli epoch-malli)
                     (java.time.LocalDateTime/ofInstant java.time.ZoneOffset/UTC))))
             gen/large-integer))
+
 
 (def local-date
   (m/-simple-schema
@@ -89,6 +100,7 @@
                        :json-schema/type   "string"
                        :json-schema/format "date-time"
                        :gen/gen gen-20years-local-date-time}}))
+
 
 (def time-schema
   {:local-date local-date

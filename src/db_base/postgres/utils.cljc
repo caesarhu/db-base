@@ -1,11 +1,16 @@
 (ns db-base.postgres.utils
   (:refer-clojure :exclude [format partition-by])
-  (:require [honeysql.format :as sqlf]
-            [fipp.edn :refer [pprint]]
-            [clojure.string :as string])
-  (:import (java.io StringWriter)))
+  (:require
+    [clojure.string :as string]
+    [fipp.edn :refer [pprint]]
+    [honeysql.format :as sqlf])
+  (:import
+    (java.io
+      StringWriter)))
+
 
 (def quote-symbol "'")
+
 
 (defn quotation-str
   ([s quote]
@@ -14,6 +19,7 @@
      (str s)))
   ([s]
    (quotation-str s quote-symbol)))
+
 
 (defn sql-command
   ([sql-v quote]
@@ -27,6 +33,7 @@
   ([sql-v]
    (sql-command sql-v quote-symbol)))
 
+
 (defn pretty-format
   [obj]
   (with-open [w (StringWriter.)]
@@ -34,11 +41,13 @@
       (pprint obj)
       (str w))))
 
+
 (defn to-sql-arg
   [arg]
   (if (string? arg)
     arg
     (sqlf/to-sql arg)))
+
 
 (defn comma-join-args
   "Returns the args comma-joined after applying to-sql to them"

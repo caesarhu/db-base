@@ -1,8 +1,10 @@
 (ns db-base.malli.translate
-  (:require [malli.core :as m]
-            [clojure.set]
-            [gungnir.model :as gm]
-            [gungnir.field :as gf]))
+  (:require
+    [clojure.set]
+    [gungnir.field :as gf]
+    [gungnir.model :as gm]
+    [malli.core :as m]))
+
 
 (defn get-locale
   [k]
@@ -11,10 +13,12 @@
                      (gf/properties k))]
     (get properties :locale/zh-tw)))
 
+
 (defn entry-pair
   [field-key]
   (when-let [locale (get-locale field-key)]
     [field-key locale]))
+
 
 (defn model-key-dict
   [model-key]
@@ -26,11 +30,13 @@
                         (apply merge (hash-map table (keyword locale-table))))]
       (merge half-map (clojure.set/map-invert half-map)))))
 
+
 (defn model-dict
   [model]
   (-> model
       gm/table
       model-key-dict))
+
 
 (defn translate
   [dict-map k]

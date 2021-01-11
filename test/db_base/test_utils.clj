@@ -1,8 +1,9 @@
 (ns db-base.test-utils
   (:require
     [clojure.spec.alpha :as s]
-    [orchestra.spec.test :as stest]
-    [expound.alpha :as expound]))
+    [expound.alpha :as expound]
+    [orchestra.spec.test :as stest]))
+
 
 (defn instrument-specs
   [f]

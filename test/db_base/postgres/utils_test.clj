@@ -1,6 +1,8 @@
 (ns db-base.postgres.utils-test
-  (:require [clojure.test :refer :all]
-            [db-base.postgres.utils :refer :all]))
+  (:require
+    [clojure.test :refer :all]
+    [db-base.postgres.utils :refer :all]))
+
 
 (deftest sql-command-test
   (testing "testing sql-command"
