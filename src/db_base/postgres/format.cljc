@@ -2,6 +2,7 @@
   (:require
     [db-base.postgres.utils :refer [comma-join-args to-sql-arg]]
     [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
+    [honeysql-postgres.format] ; must require honeysql-postgres.format
     [honeysql.helpers :as sqlh]))
 
 

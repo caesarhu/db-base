@@ -1,9 +1,7 @@
 (ns db-base.postgres.format-test
   (:require
     [clojure.test :as test]
-    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
-    [honeysql-postgres.format] ; must require honeysql-postgres.format
-    [db-base.postgres.format :as format]
+    [db-base.postgres.format] ; must require for honeysql format
     [db-base.schema :as db-schema]
     [db-base.test-utils :refer [instrument-specs]]
     [honeysql-postgres.helpers :as psqlh]

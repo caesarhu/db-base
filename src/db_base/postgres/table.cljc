@@ -2,9 +2,7 @@
   (:require
     [db-base.config :as config]
     [db-base.postgres.enum :as enum]
-    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
-    [honeysql-postgres.format] ; must require honeysql-postgres.format for format
-    [db-base.postgres.format]
+    [db-base.postgres.format] ; must require for honeysql format
     [db-base.postgres.utils :as utils]
     [db-base.schema :as db-schema]
     [gungnir.field :as gf]
