@@ -11,6 +11,7 @@
     [gungnir.changeset :as gc]
     [gungnir.field :as gf]
     [gungnir.model :as gm]
+    [gungnir.query :as gq]
     [juxt.clip.repl :refer [start stop set-init! reset system]]
     [kaocha.repl :as k]
     [malli.core :as m]

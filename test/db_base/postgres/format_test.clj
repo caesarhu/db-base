@@ -1,14 +1,13 @@
 (ns db-base.postgres.format-test
   (:require
     [clojure.test :as test]
-    ; must require honeysql-postgres.format for format
+    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
+    [honeysql-postgres.format] ; must require honeysql-postgres.format
     [db-base.postgres.format :as format]
     [db-base.schema :as db-schema]
     [db-base.test-utils :refer [instrument-specs]]
-    [honeysql-postgres.format]
     [honeysql-postgres.helpers :as psqlh]
-    [honeysql.core :as sql]
-    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]])) ; must require after honeysql-postgres.format))
+    [honeysql.core :as sql]))
 
 (test/use-fixtures
   :once
