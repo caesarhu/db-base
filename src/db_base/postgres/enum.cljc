@@ -1,6 +1,5 @@
 (ns db-base.postgres.enum
   (:require
-    [camel-snake-kebab.core :as csk]
     [db-base.config :as config]
     [db-base.postgres.utils :as utils]
     [honeysql-postgres.util :refer [comma-join-args]]
@@ -22,7 +21,7 @@
                         (map keyword)
                         comma-join-args)]
     (str "CREATE TYPE "
-         (csk/->snake_case_string (get-enum-name enum))
+         (utils/to-sql-arg (get-enum-name enum))
          " AS ENUM "
          values-str
          ";")))
@@ -31,7 +30,7 @@
 (defn drop-enum
   [enum]
   (str "DROP TYPE IF EXISTS "
-       (csk/->snake_case_string (get-enum-name enum))
+       (utils/to-sql-arg (get-enum-name enum))
        " CASCADE;"))
 
 
@@ -39,7 +38,7 @@
   [enum]
   (let [base {:up (vector (create-enum enum))
               :down (vector (drop-enum enum))}
-        id (get (m/properties enum) :id)]
+        id (get (m/properties enum) :ragtime/id)]
     (if id
       (assoc base :id id)
       base)))

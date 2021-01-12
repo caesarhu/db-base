@@ -1,7 +1,7 @@
 {:enum {:enum-gender
         [:enum
          {:error/message "should be: 男|女"
-          :id "000-enum-gender"
+          :ragtime/id "000-enum-gender"
           ;:enum-name :enum-gender
           :locale/zh-tw "性別"}
          "男" "女"]
@@ -9,7 +9,7 @@
         :enum-direct
         [:enum
          {:error/message "should be: 直接|間接"
-          :id "001-enum-direct"
+          :ragtime/id "001-enum-direct"
           ;:enum-name :enum-direct
           :locale/zh-tw "間直接"}
          "直接" "間接"]
@@ -17,7 +17,7 @@
         :enum-salary
         [:enum
          {:error/message "should be: 月薪|計時|計件"
-          :id "002-enum-salary"
+          :ragtime/id "002-enum-salary"
           ;:enum-name :enum-salary
           :locale/zh-tw "薪資類別"}
          "月薪" "計時" "計件"]
@@ -25,7 +25,7 @@
         :enum-employee
         [:enum
          {:error/message "should be: 回聘|契約正式|契約工讀|計時|計件"
-          :id "003-enum-employee"
+          :ragtime/id "003-enum-employee"
           ;:enum-name :enum-employee
           :locale/zh-tw "員工類別"}
          "回聘" "契約正式" "契約工讀" "計時" "計件"]
@@ -33,23 +33,23 @@
         :enum-price
         [:enum
          {:error/message "should be: 直接費用|間接費用|研發費用|推銷費用|管理費用|製造費用"
-          :id "004-enum-price"
+          :ragtime/id "004-enum-price"
           ;:enum-name :enum-price
           :locale/zh-tw "費用類別"}
          "直接費用" "間接費用" "研發費用" "推銷費用" "管理費用" "製造費用"]
 
         :enum-change
         [:enum
-         {:error/message "should be: 到職|離職|復職|停職"
-          :id "005-enum-change"
+         {:error/message "should be: 到職|離職|調職|復職|停職"
+          :ragtime/id "005-enum-change"
           ;:enum-name :enum-change
           :locale/zh-tw "員工異動類別"}
-         "到職" "離職" "復職" "停職"]
+         "到職" "離職" "調職" "復職" "停職"]
 
         :enum-month-period
         [:enum
          {:error/message "should be: 上期|下期"
-          :id "006-enum-month-period"
+          :ragtime/id "006-enum-month-period"
           ;:enum-name :enum-month-period
           :locale/zh-tw "月薪期別"}
          "上期" "下期"]}
@@ -58,7 +58,7 @@
                 :create-index [:index-name :idx-employee-by-name
                                :table :employee
                                :column :name]
-                :id "101-employee"
+                :ragtime/id "101-employee"
                 :belongs-to {:employee/bank {:model :bank :through :employee/bank-id}}
                 :has-many {:employee/changes {:model :change :through :change/employee-id}}}
           [:employee/id {:primary-key true
@@ -112,7 +112,7 @@
 
          :change
          [:map {:locale/zh-tw "員工異動檔"
-                :id "102-change"
+                :ragtime/id "102-change"
                 :create-index [:index-name :idx-change-by-employee-id
                                :table :change
                                :column :employee-id]
@@ -134,7 +134,7 @@
 
          :bank
          [:map {:locale/zh-tw "銀行一覽表"
-                :id "100-bank"
+                :ragtime/id "100-bank"
                 :has-many {:bank/employees {:model :employee :through :employee/bank-id}}}
           [:bank/bank-id {:primary-key true
                           :locale/zh-tw "銀行代號"} :employee/bank-id]

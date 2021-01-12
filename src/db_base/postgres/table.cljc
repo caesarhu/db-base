@@ -51,13 +51,10 @@
   (let [type-fn (fn [tv]
                   (let [[ts pt] tv]
                     (when (contains? ts type)
-                      pt)))
-        enum-set (-> (db-schema/db-enums)
-                     keys
-                     set)]
+                      pt)))]
     (cond
       (some type-fn ->postgres-type) (some type-fn ->postgres-type)
-      (contains? enum-set type) type
+      (db-schema/is-enum? type) type
       :else (throw (ex-info "field type parse error!"
                             {:cause ::type->postgres
                              :type type})))))
@@ -167,7 +164,7 @@
                        (filter some?)
                        vec)
               :down (vector (drop-table model))}
-        id (get (gm/properties model) :id)]
+        id (get (gm/properties model) :ragtime/id)]
     (if id
       (assoc base :id id)
       base)))

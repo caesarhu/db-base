@@ -57,6 +57,17 @@
     (:enum (db-schema))))
 
 
+(defn enum-keys-set
+  []
+  (set (keys (db-enums))))
+
+
+(defn is-enum?
+  [k]
+  (when (keyword? k)
+    (->> k name keyword (contains? (enum-keys-set)))))
+
+
 (defn db-models
   []
   (:model (db-schema)))
