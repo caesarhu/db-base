@@ -49,10 +49,8 @@
 
 (defn local-bank-seed!
   ([db]
-   (->> (read-bank-txt bank-txt)
-        (map #(db-bank/bank-upsert % db))
-        dorun)
    (->> (read-bank-csv bank-csv)
+        (concat (read-bank-txt bank-txt))
         (map #(db-bank/bank-upsert % db))
         dorun))
   ([]
