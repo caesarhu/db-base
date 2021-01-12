@@ -42,19 +42,13 @@
   (timbre/merge-config! m))
 
 
-(defn setup-db
-  []
-  (let [data-source (hikari/make-datasource {:jdbc-url (:jdbc-url @config)})]
-    (gdb/set-datasource! data-source)
-    data-source))
+(def db
+  (redelay/state
+    :start
+    (let [data-source (hikari/make-datasource {:jdbc-url (:jdbc-url @config)})]
+      (gdb/set-datasource! data-source)
+      data-source)
 
-(comment
-  (def db
-    (redelay/state
-      :start
-      (let [data-source (hikari/make-datasource {:jdbc-url (:jdbc-url @config)})]
-        (gdb/set-datasource! data-source)
-        data-source)
+    :stop
+    (hikari/close-datasource this)))
 
-      :stop
-      (hikari/close-datasource this))))

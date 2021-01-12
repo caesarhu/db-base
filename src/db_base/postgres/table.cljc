@@ -51,11 +51,16 @@
   (let [type-fn (fn [tv]
                   (let [[ts pt] tv]
                     (when (contains? ts type)
-                      pt)))]
-    (if-let [postgres-type (some type-fn ->postgres-type)]
-      postgres-type
-      (when (keyword? type)
-        type))))
+                      pt)))
+        enum-set (-> (db-schema/db-enums)
+                     keys
+                     set)]
+    (cond
+      (some type-fn ->postgres-type) (some type-fn ->postgres-type)
+      (contains? enum-set type) type
+      :else (throw (ex-info "field type parse error!"
+                            {:cause ::type->postgres
+                             :type type})))))
 
 
 (defn field->postgres-type

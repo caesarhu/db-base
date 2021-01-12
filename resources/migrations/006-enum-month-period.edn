@@ -1,3 +1,0 @@
-{:up ["CREATE TYPE enum_month_period AS ENUM ('上期', '下期');"],
- :down ["DROP TYPE IF EXISTS enum_month_period CASCADE;"],
- :id "006-enum-month-period"}

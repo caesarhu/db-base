@@ -20,3 +20,16 @@
   []
   (spit-enum-all)
   (spit-table-all))
+
+(defn generate-enum-edn-all
+  []
+  (map enum/generate-enum-edn (vals (db-schema/db-enums))))
+
+(defn generate-table-edn-all
+  []
+  (map table/generate-table-edn (vals @gm/models)))
+
+(defn generate-edn-all
+  []
+  (->> (concat (generate-enum-edn-all) (generate-table-edn-all))
+       (sort-by :id)))

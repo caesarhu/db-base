@@ -1,3 +1,0 @@
-{:up ["CREATE TYPE enum_change AS ENUM ('到職', '離職', '復職', '停職');"],
- :down ["DROP TYPE IF EXISTS enum_change CASCADE;"],
- :id "005-enum-change"}

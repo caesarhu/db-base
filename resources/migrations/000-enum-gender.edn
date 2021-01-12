@@ -1,3 +1,0 @@
-{:up ["CREATE TYPE enum_gender AS ENUM ('男', '女');"],
- :down ["DROP TYPE IF EXISTS enum_gender CASCADE;"],
- :id "000-enum-gender"}

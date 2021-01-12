@@ -37,6 +37,7 @@
         org.clojure/tools.namespace {:mvn/version "1.1.0"}
         ragtime/ragtime {:mvn/version "0.8.0"}
         caesarhu/gungnir {:git/url "https://github.com/caesarhu/gungnir"
-                          :sha "4f029f83d249e9405eb9676208637e2216f5c3ba"}
+                          :sha "dc62025b1a0ca8ded3e4ae10d1c62eb81b64e818"}
         com.gfredericks/test.chuck {:mvn/version "0.2.10"}
+        org.clojure/data.csv {:mvn/version "1.0.0"}
         taiwan-id/taiwan-id {:mvn/version "0.4.1"}}}

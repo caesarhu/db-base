@@ -17,3 +17,5 @@ pom.xml.asc
 /.cpcache
 /.socket-repl-port
 /logs
+*.xls;xlsx
+/.rebl
