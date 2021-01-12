@@ -70,10 +70,14 @@
                                  :unique true} :employee/company-id]
           [:employee/name {:locale/zh-tw "姓名"} :employee/name]
           [:employee/birthday {:locale/zh-tw "生日"} :local-date]
-          [:employee/gender {:locale/zh-tw "性別"} :enum-gender]
-          [:employee/direct-kind {:locale/zh-tw "間直接"} :enum-direct]
-          [:employee/employee-kind {:locale/zh-tw "員工類別"} :enum-employee]
-          [:employee/price-kind {:locale/zh-tw "費用類別"} :enum-price]
+          [:employee/gender {:locale/zh-tw "性別"
+                             :before-save [:enum/as-other]} :enum-gender]
+          [:employee/direct-kind {:locale/zh-tw "間直接"
+                                  :before-save [:enum/as-other]} :enum-direct]
+          [:employee/employee-kind {:locale/zh-tw "員工類別"
+                                    :before-save [:enum/as-other]} :enum-employee]
+          [:employee/price-kind {:locale/zh-tw "費用類別"
+                                 :before-save [:enum/as-other]} :enum-price]
           [:employee/reg-addr {:locale/zh-tw "戶籍地址"} :employee/reg-addr]
           [:employee/mail-addr {:locale/zh-tw "通訊地址"
                                 :optional true} [:maybe :employee/mail-addr]]
@@ -124,7 +128,8 @@
            {:locale/zh-tw "員工基本資料檔id"
             :references [:table :employee :column :id :on-delete "CASCADE" :on-update "CASCADE"]}
            pos-int?]
-          [:change/change-kind {:locale/zh-tw "異動類別"} :enum-change]
+          [:change/change-kind {:locale/zh-tw "異動類別"
+                                :before-save [:enum/as-other]} :enum-change]
           [:change/change-day {:locale/zh-tw "異動日期"
                                :default :CURRENT_DATE} :local-date]
           [:change/created-at {:locale/zh-tw "建立時間"

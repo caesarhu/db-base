@@ -2,6 +2,7 @@
   (:require
     [aero.core :as aero]
     [clojure.java.io :as io]
+    [next.jdbc.types :as types]
     [db-base.malli.employee :as employee]
     [db-base.malli.malli-time :as time]
     [gungnir.model :as model]
@@ -34,10 +35,6 @@
 (defn register-map!
   [m]
   (swap! registry* merge m))
-
-
-(mr/set-default-registry!
-  (mr/mutable-registry registry*))
 
 
 (def schema-edn "schema.edn")
@@ -77,10 +74,17 @@
   []
   (model/register! (db-models)))
 
+;;; gungnir.model multimethods
+
+(defmethod model/before-save :enum/as-other [_k v]
+  (types/as-other v))
+
 ;;; 加入enum employee 的欄位 malli 定義及model定義
 
 (defn register-all!
   []
+  (mr/set-default-registry!
+    (mr/mutable-registry registry*))
   (register-map! (db-enums))
   (register-map! employee/employee-schema)
   (model/register! (db-models)))
