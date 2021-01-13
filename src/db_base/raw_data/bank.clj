@@ -5,14 +5,11 @@
             [clojure.data.csv :as csv]
             [db-base.db.bank :as db-bank]))
 
-(def bank-data
-  (:bank-data @config/config))
+(def bank-fisc
+  (first (:bank-data @config/config)))
 
-(def bank-txt
-  (first bank-data))
-
-(def bank-csv
-  (last bank-data))
+(def banking
+  (last (:bank-data @config/config)))
 
 (def lost-banks
   [["0520498" "渣打國際商業銀行延平分行"]])
@@ -30,7 +27,7 @@
                        (apply str))
                   #"\s+")))
 
-(defn read-bank-txt
+(defn read-bank-fisc
   [path]
   (->> (map convert-chinese-space (-> (slurp (io/resource path) :encoding "Big5")
                                       (string/split #"\r\n")))
@@ -38,20 +35,30 @@
        (concat lost-banks)
        (map #(zipmap [:bank/bank-id :bank/name] %))))
 
-(defn read-bank-csv
+(defn read-banking
   [path]
-  (let [csv-str (-> (slurp (io/resource path) :encoding "Utf16")
-                    (string/replace #"=" ""))]
-    (->> (csv/read-csv csv-str :separator \tab :quote \")
+  (let [lines (-> (slurp (io/resource path))
+                  (string/split #"\r\n"))]
+    (->> (map #(string/split % #"\s+") lines)
          (map rest)
-         (map #(vector (first %) (second %)))
+         (map (partial take 2))
+         (filter not-empty)
          (map #(zipmap [:bank/bank-id :bank/name] %)))))
 
 (defn local-bank-seed!
   ([db]
-   (->> (read-bank-csv bank-csv)
-        (concat (read-bank-txt bank-txt))
+   (->> (read-banking banking)
+        (concat (read-bank-fisc bank-fisc))
         (map #(db-bank/bank-upsert % db))
         dorun))
   ([]
    (local-bank-seed! @config/db)))
+
+(defn init-bank-seed!
+  ([f db]
+   (when-not (= 5764 (db-bank/bank-count db))
+     (f db)))
+  ([f]
+   (init-bank-seed! f @config/db))
+  ([]
+   (init-bank-seed! local-bank-seed!)))

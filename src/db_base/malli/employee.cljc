@@ -3,7 +3,8 @@
     [clojure.test.check.generators :as gen]
     [db-base.malli.address :as addr]
     [malli.core :as m]
-    [taiwan-id.core :as id]))
+    [taiwan-id.core :as id]
+    [db-base.raw-data.bank :as bank]))
 
 
 (def taiwan-id
@@ -18,8 +19,21 @@
   [:re {:error/message "必須是員工編號-5位數字或Z開頭4位數字"} #"^[Z\d]\d{4}$"])
 
 
-(def bank-id
-  [:re {:error/message "必須是銀行代號-7位數字"} #"^\d{7}$"])
+(def gen-bank-id
+  (gen/fmap (fn [_]
+              (-> (bank/read-bank-fisc bank/bank-fisc)
+                  rand-nth
+                  :bank/bank-id))
+            gen/large-integer))
+
+
+(def bank-id-schema
+  (m/-simple-schema
+    {:type :string
+     :pred (fn [s]
+             (re-matches #"^\d{7}$" s))
+     :type-properties {:error/message "必須是銀行代號-7位數字"
+                       :gen/gen gen-bank-id}}))
 
 
 (def account
@@ -87,7 +101,7 @@
 (def employee-schema
   {:employee/taiwan-id taiwan-id
    :employee/company-id company-id
-   :employee/bank-id bank-id
+   :employee/bank-id bank-id-schema
    :employee/account account
    :employee/name name-schema
    :employee/unit-id unit-id

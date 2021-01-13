@@ -8,7 +8,7 @@
  :schema-path "schema.edn"
  :migration-dir "migrations"
  :address-path "raw/address.csv"
- :bank-data ["raw/twd.txt" "raw/bankno.csv"]
+ :bank-data ["raw/twd.txt" "raw/bankno.txt"]
 
  :appender-opts
  #profile {:dev {:path "logs/dev.log"
@@ -36,7 +36,12 @@
              :appenders {:println {:min-level :info}
                          :rolling (db-base.config/rolling-appender #ref [:appender-opts])}})}
 
+  :gungnir
+  {:pre-start (db-base.schema/register-all!)
+   :start (gungnir.database/set-datasource! (db-base.config/get-db))}
+
   :system
-  {:start (db-base.schema/register-all!)
-   :post-start (db-base.ragtime/migrate)
+  {:pre-start (clip/ref :gungnir)
+   :start (db-base.ragtime/migrate)
+   :post-start (db-base.raw-data.bank/init-bank-seed!)
    :stop (redelay.core/stop)}}}

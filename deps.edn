@@ -40,4 +40,5 @@
                           :sha "dc62025b1a0ca8ded3e4ae10d1c62eb81b64e818"}
         com.gfredericks/test.chuck {:mvn/version "0.2.10"}
         org.clojure/data.csv {:mvn/version "1.0.0"}
-        taiwan-id/taiwan-id {:mvn/version "0.4.1"}}}
+        taiwan-id/taiwan-id {:mvn/version "0.4.1"}
+        dk.ative/docjure {:mvn/version "1.14.0"}}}

@@ -2,7 +2,6 @@
   (:require
     [aero.core :as aero]
     [clojure.java.io :as io]
-    [gungnir.database :as gdb]
     [hikari-cp.core :as hikari]
     [redelay.core :as redelay]
     [taoensso.timbre :as timbre]
@@ -45,10 +44,12 @@
 (def db
   (redelay/state
     :start
-    (let [data-source (hikari/make-datasource {:jdbc-url (:jdbc-url @config)})]
-      (gdb/set-datasource! data-source)
-      data-source)
+    (hikari/make-datasource {:jdbc-url (:jdbc-url @config)})
 
     :stop
     (hikari/close-datasource this)))
+
+(defn get-db
+  []
+  @db)
 
